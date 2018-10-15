@@ -31,6 +31,39 @@ public class Interface {
 		frame.setSize(width, height);
 		frame.setLocation(widthLocation, heightLocation);
 		frame.setLayout(new BorderLayout());
+		
+		//header
+		header.setLayout(new BorderLayout());
+		
+		JTextField c1 = new JTextField("Bom Dia Academia");
+		c1.setEditable(false);
+		c1.setHorizontalAlignment(JTextField.CENTER);
+		header.add(c1, BorderLayout.NORTH);
+		
+		JPanel subheader = new JPanel();	
+		subheader.setLayout(new FlowLayout());
+		JButton button1 = new JButton("Facebook");
+		JButton button2 = new JButton("Twitter");
+		JButton button3 = new JButton("Email");
+		subheader.add(button1);
+		subheader.add(button2);
+		subheader.add(button3);
+		
+		header.add(subheader, BorderLayout.CENTER);
+		
+		JPanel subheader2 = new JPanel();
+		subheader2.setLayout(new GridLayout(3,1));
+		JTextField i1 = new JTextField("Fb: es29");
+		JTextField i2 = new JTextField("Tw: ES29");
+		JTextField i3 = new JTextField("Em: es29@gmail.com");
+		i1.setEditable(false);
+		i2.setEditable(false);
+		i3.setEditable(false);
+		subheader2.add(i1);
+		subheader2.add(i2);
+		subheader2.add(i3);
+		
+		header.add(subheader2, BorderLayout.EAST);
 
 		// Fetch emails
 		FetchEmails emails = new FetchEmails();

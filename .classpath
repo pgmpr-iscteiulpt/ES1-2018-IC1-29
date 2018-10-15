@@ -2,6 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="ES1-2018-IC1-29/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="E:/Eclipse/javax.mail.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ze_ra/Desktop/javax.mail.jar"/>
 	<classpathentry kind="output" path="ES1-2018-IC1-29/bin"/>
 </classpath>

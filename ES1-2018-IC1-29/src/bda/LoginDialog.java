@@ -118,7 +118,7 @@ public class LoginDialog extends JDialog {
 	}
 
 	public void login() {
-		if (getUsername().equals("bob") && getPassword().equals("secret")) {
+		if (getUsername().equals("29") && getPassword().equals("vascodagama")) {
 			JOptionPane.showMessageDialog(LoginDialog.this,"Hi " + getUsername() + "! You have successfully logged in.", "Login", JOptionPane.INFORMATION_MESSAGE);
 			login.dispose();
 		} else {
