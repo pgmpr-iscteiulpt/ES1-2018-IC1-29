@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
+import javax.mail.Message;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -17,11 +17,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
 
+@SuppressWarnings("serial")
+public class Login extends JDialog {
 
-public class LoginDialog extends JDialog {
-
+	// Componentes da janela
 	private JDialog login;
 	private JLabel nameLabel = new JLabel("Name : ");
 	private JTextField nameField = new JTextField();
@@ -30,13 +30,18 @@ public class LoginDialog extends JDialog {
 	private JButton okButton = new JButton("Ok");
 	private JButton cancelButton = new JButton("Cancel");
 
-	public LoginDialog() {
-		login =  new JDialog();	
+	private Interface i;
+	private BDAButton b;
+
+	public Login(Interface i, BDAButton b) {
+		this.i = i;
+		this.b = b;
+		login = new JDialog();
 		login.setTitle("Login");
-		login.pack();
-		login.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		addLoginDialogContent();
 		addLoginDialogListeners();
+		login.pack();
+		login.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	}
 
 	public void open() {
@@ -44,6 +49,7 @@ public class LoginDialog extends JDialog {
 		login.setVisible(true);
 	}
 
+	// Criação da janela
 	private void addLoginDialogContent() {
 
 		JPanel loginPanel = new JPanel(new GridBagLayout());
@@ -93,7 +99,7 @@ public class LoginDialog extends JDialog {
 
 	private void addLoginDialogListeners() {
 
-		passwordField.addKeyListener(new KeyAdapter() { 
+		passwordField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -117,19 +123,25 @@ public class LoginDialog extends JDialog {
 		});
 	}
 
+	// Login nos canais
 	public void login() {
-		if (getUsername().equals("29") && getPassword().equals("vascodagama")) {
-			JOptionPane.showMessageDialog(LoginDialog.this,"Hi " + getUsername() + "! You have successfully logged in.", "Login", JOptionPane.INFORMATION_MESSAGE);
+		try {
+			FetchEmails emails = new FetchEmails();
+			emails.checkMail(getUsername(), getPassword());
+			Message[] msgs = emails.getMsgs();
+			b.changeImage();
+			b.changeState();
+			i.getInboxTable().setModel(new BDATableModel(msgs));
+			i.getInboxTable().getColumnModel().getColumn(3)
+					.setPreferredWidth((int) (i.getInboxTable().getWidth() * 0.4));
 			login.dispose();
-		} else {
-			JOptionPane.showMessageDialog(LoginDialog.this,"Invalid username or password", "Login", JOptionPane.ERROR_MESSAGE);
+		} catch (Exception E) {
+			JOptionPane.showMessageDialog(Login.this, "Invalid username or password", "Login",
+					JOptionPane.ERROR_MESSAGE);
 			nameField.setText("");
 			passwordField.setText("");
 		}
+
 	}
 
-	public static void main(String[] args) {
-		LoginDialog login = new LoginDialog();
-		login.open();
-	}
 }

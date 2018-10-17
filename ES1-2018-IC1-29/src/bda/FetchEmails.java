@@ -20,12 +20,18 @@ public class FetchEmails {
 		try {
 			Session session = Session.getInstance(props, null);
 			Store store = session.getStore();
-			store.connect("imap.gmail.com", username, password);
+			try {
+				store.connect("imap.gmail.com", username, password);
+			}catch (Exception e){ //descobrir nome
+				System.out.println("invalid user and pass");
+				return;
+			}
 			Folder inbox = store.getFolder("INBOX");
 			inbox.open(Folder.READ_ONLY);
 			msgs = inbox.getMessages();
 
 		} catch (Exception e) {
+			System.out.println("invalid");
 			e.printStackTrace();
 		}
 	}
