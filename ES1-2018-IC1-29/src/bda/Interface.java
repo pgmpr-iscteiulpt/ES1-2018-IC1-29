@@ -19,6 +19,11 @@ public class Interface {
 	private BDAButton mailButton = new BDAButton(this, "email");
 	private BDAButton twitterButton = new BDAButton(this, "twitter");
 	private JTable inboxTable;
+	
+	// TextFields
+	private JTextField i1 = new JTextField("Not Logged In   ");
+	private JTextField i2 = new JTextField("Not Logged In   ");
+	private JTextField i3 = new JTextField("Not Logged In   ");
 
 	// Panels
 	private JPanel inbox = new JPanel();
@@ -52,15 +57,26 @@ public class Interface {
 		// subHeader2
 		JPanel subheader2 = new JPanel();
 		subheader2.setLayout(new GridLayout(3, 1));
-		JTextField i1 = new JTextField("Fb: es29");
-		JTextField i2 = new JTextField("Tw: ES29");
-		JTextField i3 = new JTextField("Em: es29@gmail.com");
 		i1.setEditable(false);
 		i2.setEditable(false);
 		i3.setEditable(false);
+		ImageIcon face = new ImageIcon("images/" + "faceOn" + ".png");
+		Image imageFace = face.getImage().getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+		ImageIcon twitter = new ImageIcon("images/" + "twitterOn" + ".png");
+		Image imageTwitter = twitter.getImage().getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+		ImageIcon email = new ImageIcon("images/" + "emailOn" + ".png");
+		Image imageMail = email.getImage().getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
+		
+		JLabel labelFace = new JLabel(new ImageIcon(imageFace));
+		subheader2.add(labelFace);
 		subheader2.add(i1);
+		JLabel labelTwitter = new JLabel(new ImageIcon(imageTwitter));
+		subheader2.add(labelTwitter);
 		subheader2.add(i2);
+		JLabel labelMail = new JLabel(new ImageIcon(imageMail));
+		subheader2.add(labelMail);
 		subheader2.add(i3);
+		
 		header.add(subheader2, BorderLayout.EAST);
 
 		// Build table
