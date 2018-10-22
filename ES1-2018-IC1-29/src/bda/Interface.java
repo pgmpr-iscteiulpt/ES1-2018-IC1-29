@@ -34,10 +34,11 @@ public class Interface {
 		// header
 		header.setLayout(new BorderLayout());
 		header.setPreferredSize(headerSize);
-		JTextField c1 = new JTextField("Bom Dia Academia");
-		c1.setEditable(false);
-		c1.setHorizontalAlignment(JTextField.CENTER);
-		header.add(c1, BorderLayout.NORTH);
+		ImageIcon c1 = new ImageIcon("images/" + "logotransparent" + ".png");
+		Image image = c1.getImage().getScaledInstance(500, 150, java.awt.Image.SCALE_SMOOTH);
+		c1 = new ImageIcon(image);
+		JLabel l = new JLabel(c1);
+		header.add(l, BorderLayout.NORTH);
 		frame.add(header, BorderLayout.NORTH);
 
 		// subHeader
