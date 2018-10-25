@@ -18,8 +18,10 @@ public class Interface {
 	private BDAButton facebookButton = new BDAButton(this, "face");
 	private BDAButton mailButton = new BDAButton(this, "email");
 	private BDAButton twitterButton = new BDAButton(this, "twitter");
+	private BDAButton recent = new BDAButton(this,"recent",true);
+	private BDAButton old = new BDAButton(this,"old",false);
 	private JTable inboxTable;
-	
+
 	// TextFields
 	private JTextField i1 = new JTextField("Not Logged In   ");
 	private JTextField i2 = new JTextField("Not Logged In   ");
@@ -39,24 +41,20 @@ public class Interface {
 		// header
 		header.setLayout(new BorderLayout());
 		header.setPreferredSize(headerSize);
-		ImageIcon c1 = new ImageIcon("images/" + "logotransparent" + ".png");
-		Image image = c1.getImage().getScaledInstance(500, 150, java.awt.Image.SCALE_SMOOTH);
-		c1 = new ImageIcon(image);
-		JLabel l = new JLabel(c1);
-		header.add(l, BorderLayout.NORTH);
 		frame.add(header, BorderLayout.NORTH);
 
-		// subHeader
-		JPanel subheader = new JPanel();
-		subheader.setLayout(new FlowLayout());
-		subheader.add(facebookButton.getButton());
-		subheader.add(mailButton.getButton());
-		subheader.add(twitterButton.getButton());
-		header.add(subheader, BorderLayout.CENTER);
+		// subHeader1
+		JPanel subheader1 = new JPanel();
+		
+		ImageIcon logoImage = new ImageIcon("images/" + "logotransparent" + ".png");
+		Image image = logoImage.getImage().getScaledInstance(408, 115, java.awt.Image.SCALE_SMOOTH);
+		logoImage = new ImageIcon(image);
+		JLabel logo = new JLabel(logoImage);	
+		subheader1.add(logo, BorderLayout.WEST);
+		logo.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 580)); 
 
-		// subHeader2
-		JPanel subheader2 = new JPanel();
-		subheader2.setLayout(new GridLayout(3, 1));
+		JPanel account = new JPanel();
+		account.setLayout(new GridLayout(3, 1));
 		i1.setEditable(false);
 		i2.setEditable(false);
 		i3.setEditable(false);
@@ -66,18 +64,39 @@ public class Interface {
 		Image imageTwitter = twitter.getImage().getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
 		ImageIcon email = new ImageIcon("images/" + "emailOn" + ".png");
 		Image imageMail = email.getImage().getScaledInstance(15, 15, java.awt.Image.SCALE_SMOOTH);
-		
+
 		JLabel labelFace = new JLabel(new ImageIcon(imageFace));
-		subheader2.add(labelFace);
-		subheader2.add(i1);
+		account.add(labelFace);
+		account.add(i1);
 		JLabel labelTwitter = new JLabel(new ImageIcon(imageTwitter));
-		subheader2.add(labelTwitter);
-		subheader2.add(i2);
+		account.add(labelTwitter);
+		account.add(i2);
 		JLabel labelMail = new JLabel(new ImageIcon(imageMail));
-		subheader2.add(labelMail);
-		subheader2.add(i3);
+		account.add(labelMail);
+		account.add(i3);
+		account.setPreferredSize( new Dimension( 290, 75 ) );
+		subheader1.add(account,BorderLayout.EAST);
+
+		header.add(subheader1, BorderLayout.NORTH);
 		
-		header.add(subheader2, BorderLayout.EAST);
+		// subHeader2
+		JPanel subheader2 = new JPanel();
+		
+		JPanel button = new JPanel();
+		button.setLayout(new FlowLayout());
+		button.add(facebookButton.getButton());
+		button.add(mailButton.getButton());
+		button.add(twitterButton.getButton());
+		subheader2.add(button, BorderLayout.WEST);
+		button.setBorder(BorderFactory.createEmptyBorder(-5, 0, 0, 800)); 
+		
+		JPanel chronology = new JPanel();
+		chronology.setLayout(new FlowLayout());
+		chronology.add(recent.getButton());
+		chronology.add(old.getButton());	
+		subheader2.add(chronology, BorderLayout.EAST);
+		
+		header.add(subheader2, BorderLayout.CENTER);
 
 		// Build table
 		inboxTable = new JTable();
@@ -88,10 +107,16 @@ public class Interface {
 		inbox.add(scrollInbox);
 		frame.add(inbox, BorderLayout.CENTER);
 
+	}
+	
+	public void open() {	
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-
+	}
+	
+	public JTextField getI3() {
+		return i3;
 	}
 
 	public JTable getInboxTable() {
@@ -99,8 +124,8 @@ public class Interface {
 	}
 
 	public static void main(String[] args) {
-		new Interface();
-
+		Interface i = new Interface();
+		i.open();
 	}
 
 }

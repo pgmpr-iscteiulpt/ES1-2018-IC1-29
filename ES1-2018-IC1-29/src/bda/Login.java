@@ -134,6 +134,7 @@ public class Login extends JDialog {
 			i.getInboxTable().setModel(new BDATableModel(msgs));
 			i.getInboxTable().getColumnModel().getColumn(3)
 					.setPreferredWidth((int) (i.getInboxTable().getWidth() * 0.4));
+			i.getI3().setText("es1.grupo29@gmail.com");
 			login.dispose();
 		} catch (Exception E) {
 			JOptionPane.showMessageDialog(Login.this, "Invalid username or password", "Login",
