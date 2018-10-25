@@ -3,6 +3,13 @@ package bda;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * Esta classe cria uma JFrame representativa da interface de um software 
+ * dedicado à integração de informação académica com origem em vários sistemas
+ * @author Grupo 29 
+ * @version 1.0
+ */
+
 public class Interface {
 
 	private JFrame frame = new JFrame("BDA");
@@ -31,6 +38,9 @@ public class Interface {
 	private JPanel inbox = new JPanel();
 	private JPanel header = new JPanel();
 
+	/**
+	 * Construtor de uma Janela que possui toda a interface do software
+	 */
 	public Interface() {
 
 		// size and centering
@@ -109,19 +119,31 @@ public class Interface {
 
 	}
 	
+	/**
+	 * Método que permite a visualização da Janela
+	 */
 	public void open() {	
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Método que devolve uma JTextField
+	 * @return JTextField (conta de email do utilizador)
+	 */
 	public JTextField getI3() {
 		return i3;
 	}
 
+	/**
+	 * Método que devolve uma JTable
+	 * @return JTable (local onde se disponibiliza toda a informação do software)
+	 */
 	public JTable getInboxTable() {
 		return inboxTable;
 	}
+
 
 	public static void main(String[] args) {
 		Interface i = new Interface();

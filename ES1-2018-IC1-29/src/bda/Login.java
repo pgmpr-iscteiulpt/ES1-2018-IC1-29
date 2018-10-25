@@ -18,6 +18,12 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+/**
+ * Implementa uma JPanel que está associada a uma interface e um botão
+ * @author Grupo 29 
+ * @version 1.0
+ */
+
 @SuppressWarnings("serial")
 public class Login extends JDialog {
 
@@ -33,6 +39,11 @@ public class Login extends JDialog {
 	private Interface i;
 	private BDAButton b;
 
+	/**
+	 * Construtor de uma Janela Login que possui uma interface e um respectivo botão 
+	 * @param i Interface a que pertence a Janela Login
+	 * @param b Botão que faz aparecer a Janela Login
+	 */
 	public Login(Interface i, BDAButton b) {
 		this.i = i;
 		this.b = b;
@@ -44,12 +55,18 @@ public class Login extends JDialog {
 		login.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	}
 
+	/**
+	 * Método que permite a visualização da Janela Login
+	 */
 	public void open() {
 		login.setSize(300, 150);
 		login.setVisible(true);
 	}
 
 	// Criação da janela
+	/**
+	 * Método que permite criar o design da Janela Login
+	 */
 	private void addLoginDialogContent() {
 
 		JPanel loginPanel = new JPanel(new GridBagLayout());
@@ -88,15 +105,26 @@ public class Login extends JDialog {
 		login.add(buttonPanel, BorderLayout.SOUTH);
 
 	}
-
+ 
+	/**
+	 * Método que devolve o nome do utilizador
+	 * @return String (mail do utilizador que pretende fazer o Login)
+	 */
 	public String getUsername() {
 		return nameField.getText().trim();
 	}
 
+	/**
+	 * Método que devolve a password do utilizador
+	 * @return String (password do utilizador que pretende fazer o Login)
+	 */
 	public String getPassword() {
 		return new String(passwordField.getPassword());
 	}
-
+ 
+	/**
+	 * Método que implementa as ações para cada ativação dos botões 
+	 */
 	private void addLoginDialogListeners() {
 
 		passwordField.addKeyListener(new KeyAdapter() {
@@ -124,6 +152,10 @@ public class Login extends JDialog {
 	}
 
 	// Login nos canais
+	/**
+	 * Método que permite averiguar se o email e password dados 
+	 * pelo utilizador são válidos para efetuar o Login
+	 */
 	public void login() {
 		try {
 			FetchEmails emails = new FetchEmails();
