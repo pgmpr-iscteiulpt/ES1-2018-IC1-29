@@ -28,7 +28,7 @@ public class BDAButton {
 	 * @param i Interface a que pertence o botão
 	 * @param iconName Nome da imagem que possuirá o botão
 	 */
-	public BDAButton(Interface i, String iconName) {
+	public BDAButton(GUI i, String iconName) {
 		this.iconName = iconName;
 		login = new Login(i, this);
 		button = new JButton(getIconButton(iconName + "Off"));
@@ -55,7 +55,7 @@ public class BDAButton {
 	 * @param iconName Nome da imagem que possuirá o botão
 	 * @param order Ordem pela qual é caracterizado o botão
 	 */
-	public BDAButton(Interface i, String iconName, boolean order ) {
+	public BDAButton(GUI i, String iconName, boolean order ) {
 		this.order = order;
 		this.iconName = iconName;
 		button = new JButton(getIconButton(iconName));
@@ -66,7 +66,7 @@ public class BDAButton {
 	/**
 	 * Método que devolve uma ImageIcon 
 	 * @param n Nome que representa a imagem
-	 * @return ImagemIcon (botão)
+	 * @return ImagemIcon (imagem do botão)
 	 */
 	public ImageIcon getIconButton(String n) {
 
@@ -110,6 +110,10 @@ public class BDAButton {
 	 */
 	public JButton getButton() {
 		return button;
+	}
+	
+	public boolean getState() {
+		return state;
 	}
  
 	/**

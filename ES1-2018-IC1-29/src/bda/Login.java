@@ -36,7 +36,7 @@ public class Login extends JDialog {
 	private JButton okButton = new JButton("Ok");
 	private JButton cancelButton = new JButton("Cancel");
 
-	private Interface i;
+	private GUI i;
 	private BDAButton b;
 
 	/**
@@ -44,7 +44,7 @@ public class Login extends JDialog {
 	 * @param i Interface a que pertence a Janela Login
 	 * @param b Botão que faz aparecer a Janela Login
 	 */
-	public Login(Interface i, BDAButton b) {
+	public Login(GUI i, BDAButton b) {
 		this.i = i;
 		this.b = b;
 		login = new JDialog();

@@ -4,13 +4,13 @@ import java.awt.*;
 import javax.swing.*;
 
 /**
- * Esta classe cria uma JFrame representativa da interface de um software 
+ * Cria uma JFrame representativa da interface de um software 
  * dedicado à integração de informação académica com origem em vários sistemas
  * @author Grupo 29 
  * @version 1.0
  */
 
-public class Interface {
+public class GUI {
 
 	private JFrame frame = new JFrame("BDA");
 	private final Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -21,12 +21,12 @@ public class Interface {
 	private final int widthLocation = screenDim.width / 2 - width / 2;
 	private final int heightLocation = screenDim.height / 2 - height / 2;
 
-	// Buttons
+	// Buttons and table
 	private BDAButton facebookButton = new BDAButton(this, "face");
 	private BDAButton mailButton = new BDAButton(this, "email");
 	private BDAButton twitterButton = new BDAButton(this, "twitter");
-	private BDAButton recent = new BDAButton(this,"recent",true);
-	private BDAButton old = new BDAButton(this,"old",false);
+	private BDAButton recent = new BDAButton(this, "recent", true);
+	private BDAButton old = new BDAButton(this, "old", false);
 	private JTable inboxTable;
 
 	// TextFields
@@ -37,11 +37,12 @@ public class Interface {
 	// Panels
 	private JPanel inbox = new JPanel();
 	private JPanel header = new JPanel();
+	
 
 	/**
-	 * Construtor de uma Janela que possui toda a interface do software
+	 * Construtor de uma Janela que possui toda a interface gráfica do software
 	 */
-	public Interface() {
+	public GUI() {
 
 		// size and centering
 		frame.setSize(width, height);
@@ -146,8 +147,8 @@ public class Interface {
 
 
 	public static void main(String[] args) {
-		Interface i = new Interface();
-		i.open();
+		GUI g = new GUI();
+		g.open();
 	}
 
 }
