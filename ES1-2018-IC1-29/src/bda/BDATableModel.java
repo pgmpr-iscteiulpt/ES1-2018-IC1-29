@@ -8,18 +8,20 @@ import javax.swing.table.AbstractTableModel;
 
 /**
  * Implementa um modelo de JTable adaptado à listagem de emails e posts
+ * 
  * @author Grupo 29
  * @version 1.0
  */
 
 @SuppressWarnings("serial")
 public class BDATableModel extends AbstractTableModel {
-	
+
 	private Message[] messages;
 	private String[] columnNames = new String[] { "Data e Hora", "Fonte", "Remetente", "Assunto" };
 
 	/**
 	 * Construtor que recebe uma lista de mensagens para apresentar
+	 * 
 	 * @param msgs Mensagem a apresentar
 	 */
 	public BDATableModel(Message[] msgs) {
@@ -28,6 +30,7 @@ public class BDATableModel extends AbstractTableModel {
 
 	/**
 	 * Método que devolve o número de colunas
+	 * 
 	 * @return Integer (número de colunas)
 	 */
 	@Override
@@ -37,6 +40,7 @@ public class BDATableModel extends AbstractTableModel {
 
 	/**
 	 * Método que devolve o número de linhas
+	 * 
 	 * @return Integer (número de linhas)
 	 */
 	@Override
@@ -46,6 +50,7 @@ public class BDATableModel extends AbstractTableModel {
 
 	/**
 	 * Método que devolve o valor de uma determinada célula
+	 * 
 	 * @return Object (informação da mensagem contida na célula)
 	 */
 	@Override
@@ -61,16 +66,27 @@ public class BDATableModel extends AbstractTableModel {
 			case 2:
 				return "Gmail";
 			case 3:
-				return msg.getSubject();
+				return msg.getSubject().toString();
 			}
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
+	
+	/**
+	 * Método que devolve uma String com o nome da coluna
+	 * 
+	 * @return Message (de uma determinada coluna)
+	 */
+	
+	public Message getMessageAt (int row) {
+		return messages[row];
+	}
 
 	/**
 	 * Método que devolve uma String com o nome da coluna
+	 * 
 	 * @return String (nome da coluna)
 	 */
 	public String getColumnName(int column) {

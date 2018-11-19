@@ -1,10 +1,12 @@
 package bda;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -20,12 +22,20 @@ import javax.swing.JTextField;
 
 /**
  * Implementa uma JPanel que está associada a uma interface e um botão
- * @author Grupo 29 
+ * 
+ * @author Grupo 29
  * @version 1.0
  */
 
 @SuppressWarnings("serial")
 public class Login extends JDialog {
+
+	// Constants
+	private final Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
+	private final int width = (int) (screenDim.width * 0.18);
+	private final int height = (int) (screenDim.height * 0.18);
+	private final int widthLocation = screenDim.width / 2 - width / 2;
+	private final int heightLocation = screenDim.height / 2 - height / 2;
 
 	// Componentes da janela
 	private JDialog login;
@@ -40,7 +50,8 @@ public class Login extends JDialog {
 	private BDAButton b;
 
 	/**
-	 * Construtor de uma Janela Login que possui uma interface e um respectivo botão 
+	 * Construtor de uma Janela Login que possui uma interface e um respectivo botão
+	 * 
 	 * @param i Interface a que pertence a Janela Login
 	 * @param b Botão que faz aparecer a Janela Login
 	 */
@@ -48,6 +59,7 @@ public class Login extends JDialog {
 		this.i = i;
 		this.b = b;
 		login = new JDialog();
+		login.setLocation(widthLocation, heightLocation);
 		login.setTitle("Login");
 		addLoginDialogContent();
 		addLoginDialogListeners();
@@ -59,7 +71,7 @@ public class Login extends JDialog {
 	 * Método que permite a visualização da Janela Login
 	 */
 	public void open() {
-		login.setSize(300, 150);
+		login.setSize(width, height);
 		login.setVisible(true);
 	}
 
@@ -105,9 +117,10 @@ public class Login extends JDialog {
 		login.add(buttonPanel, BorderLayout.SOUTH);
 
 	}
- 
+
 	/**
 	 * Método que devolve o nome do utilizador
+	 * 
 	 * @return String (mail do utilizador que pretende fazer o Login)
 	 */
 	public String getUsername() {
@@ -116,14 +129,15 @@ public class Login extends JDialog {
 
 	/**
 	 * Método que devolve a password do utilizador
+	 * 
 	 * @return String (password do utilizador que pretende fazer o Login)
 	 */
 	public String getPassword() {
 		return new String(passwordField.getPassword());
 	}
- 
+
 	/**
-	 * Método que implementa as ações para cada ativação dos botões 
+	 * Método que implementa as ações para cada ativação dos botões
 	 */
 	private void addLoginDialogListeners() {
 
@@ -153,8 +167,8 @@ public class Login extends JDialog {
 
 	// Login nos canais
 	/**
-	 * Método que permite averiguar se o email e password dados 
-	 * pelo utilizador são válidos para efetuar o Login
+	 * Método que permite averiguar se o email e password dados pelo utilizador são
+	 * válidos para efetuar o Login
 	 */
 	public void login() {
 		try {
@@ -166,7 +180,7 @@ public class Login extends JDialog {
 			i.getInboxTable().setModel(new BDATableModel(msgs));
 			i.getInboxTable().getColumnModel().getColumn(3)
 					.setPreferredWidth((int) (i.getInboxTable().getWidth() * 0.4));
-			i.getI3().setText("es1.grupo29@gmail.com");
+			i.getLog3().setText("es1.grupo29@gmail.com");
 			login.dispose();
 		} catch (Exception E) {
 			JOptionPane.showMessageDialog(Login.this, "Invalid username or password", "Login",
