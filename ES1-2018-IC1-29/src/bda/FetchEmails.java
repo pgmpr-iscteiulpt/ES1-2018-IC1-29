@@ -2,10 +2,10 @@ package bda;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Properties;
 import javax.mail.Folder;
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
 
@@ -18,14 +18,14 @@ import javax.mail.Store;
  */
 public class FetchEmails {
 
-	private Message[] msgs;
+	private ArrayList<Content> msgs = new ArrayList<Content>();
 
 	/**
 	 * Método que devolve um vector de Mensagens
 	 * 
 	 * @return Vector (mensagens que constam no mail do utilizador)
 	 */
-	public Message[] getMsgs() {
+	public ArrayList<Content> getMsgs() {
 		return msgs;
 	}
 
@@ -50,26 +50,25 @@ public class FetchEmails {
 			}
 			Folder inbox = store.getFolder("INBOX");
 			inbox.open(Folder.READ_ONLY);
-			msgs = inbox.getMessages();
-			for (Message m : msgs) {
-				String hash = createHashCode(m);
+
+			for (int i = 1; i <= inbox.getMessages().length; i++) {
+				msgs.add(new Content (inbox.getMessage(i)));
+			}
+			
+			for (Content c : msgs) {
+				String hash = c.getHashCode();
 				PrintWriter writer = new PrintWriter(
 						System.getProperty("user.dir") + File.separator + "Emails\\Email" + hash, "UTF-8");
-				writer.println(m.getContent().toString());
+				writer.println((c.getContent()).toString());
 				writer.close();
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	private String createHashCode(Message m) throws MessagingException {
-		String[] date = m.getSentDate().toString().split(" ");
-		String[] time = date[3].split(":");
-		String hash = date[0] + date[1] + date[2] + date[5] + time[0] + time[1] + time[2];
-		return hash;
 
 	}
 
 }
+
+

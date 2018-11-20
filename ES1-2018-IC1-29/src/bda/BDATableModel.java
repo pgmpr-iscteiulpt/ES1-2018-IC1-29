@@ -1,10 +1,15 @@
 package bda;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.swing.table.AbstractTableModel;
+
+import twitter4j.Status;
 
 /**
  * Implementa um modelo de JTable adaptado à listagem de emails e posts
@@ -16,7 +21,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class BDATableModel extends AbstractTableModel {
 
-	private Message[] messages;
+	private ArrayList<Content> content;
 	private String[] columnNames = new String[] { "Data e Hora", "Fonte", "Remetente", "Assunto" };
 
 	/**
@@ -24,8 +29,8 @@ public class BDATableModel extends AbstractTableModel {
 	 * 
 	 * @param msgs Mensagem a apresentar
 	 */
-	public BDATableModel(Message[] msgs) {
-		messages = msgs;
+	public BDATableModel(ArrayList<Content> content) {
+		this.content = content;
 	}
 
 	/**
@@ -45,7 +50,7 @@ public class BDATableModel extends AbstractTableModel {
 	 */
 	@Override
 	public int getRowCount() {
-		return messages.length;
+		return content.size();
 	}
 
 	/**
@@ -55,20 +60,19 @@ public class BDATableModel extends AbstractTableModel {
 	 */
 	@Override
 	public Object getValueAt(int row, int column) {
-		Message msg = messages[row];
+		Content c = content.get(row);
 		try {
 			switch (column) {
 			case 0:
-				return msg.getReceivedDate();
+				return c.getDate();
 			case 1:
-				Address[] a = msg.getFrom();
-				return ((InternetAddress) a[0]).getAddress();
+				return c.getFrom();
 			case 2:
-				return "Gmail";
+				return c.getType();
 			case 3:
-				return msg.getSubject().toString();
+				return c.getSubject();
 			}
-		} catch (MessagingException e) {
+		} catch (MessagingException | IOException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -78,10 +82,12 @@ public class BDATableModel extends AbstractTableModel {
 	 * Método que devolve uma String com o nome da coluna
 	 * 
 	 * @return Message (de uma determinada coluna)
+	 * @throws MessagingException 
+	 * @throws IOException 
 	 */
 	
-	public Message getMessageAt (int row) {
-		return messages[row];
+	public Object getMessageAt (int row) throws IOException, MessagingException {
+		return content.get(row).getContent();
 	}
 
 	/**
@@ -92,5 +98,11 @@ public class BDATableModel extends AbstractTableModel {
 	public String getColumnName(int column) {
 		return columnNames[column];
 	}
+	
+	public void addRow (Content c) {
+		content.add(c);
+	}
 
 }
+
+

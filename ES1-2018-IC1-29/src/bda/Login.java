@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+
 import javax.mail.Message;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -19,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.table.AbstractTableModel;
 
 /**
  * Implementa uma JPanel que está associada a uma interface e um botão
@@ -45,6 +48,8 @@ public class Login extends JDialog {
 	private JPasswordField passwordField = new JPasswordField();
 	private JButton okButton = new JButton("Ok");
 	private JButton cancelButton = new JButton("Cancel");
+	private String type;
+	private ArrayList<Content> content = new ArrayList<Content>();
 
 	private GUI i;
 	private BDAButton b;
@@ -58,6 +63,7 @@ public class Login extends JDialog {
 	public Login(GUI i, BDAButton b) {
 		this.i = i;
 		this.b = b;
+		type = b.getIconName();
 		login = new JDialog();
 		login.setLocation(widthLocation, heightLocation);
 		login.setTitle("Login");
@@ -171,24 +177,44 @@ public class Login extends JDialog {
 	 * válidos para efetuar o Login
 	 */
 	public void login() {
-		try {
-			FetchEmails emails = new FetchEmails();
-			emails.checkMail(getUsername(), getPassword());
-			Message[] msgs = emails.getMsgs();
+
+		if (type.equals("email")) {
+			try {
+				FetchEmails email = new FetchEmails();
+				email.checkMail(getUsername(), getPassword());
+				content = email.getMsgs();
+				b.changeImage();
+				b.changeState();
+				i.getLog(3).setText(nameField.getText());
+				login.dispose();
+			} catch (Exception E) {
+				JOptionPane.showMessageDialog(Login.this, "Invalid username or password", "Login",
+						JOptionPane.ERROR_MESSAGE);
+				nameField.setText("");
+				passwordField.setText("");
+			}
+		}
+		if (type.equals("twitter")) {
+			FetchTweets twitter = new FetchTweets();
+			content = twitter.getStatus();
 			b.changeImage();
 			b.changeState();
-			i.getInboxTable().setModel(new BDATableModel(msgs));
-			i.getInboxTable().getColumnModel().getColumn(3)
-					.setPreferredWidth((int) (i.getInboxTable().getWidth() * 0.4));
-			i.getLog3().setText("es1.grupo29@gmail.com");
+			i.getLog(2).setText("@Grupo29");
 			login.dispose();
-		} catch (Exception E) {
-			JOptionPane.showMessageDialog(Login.this, "Invalid username or password", "Login",
-					JOptionPane.ERROR_MESSAGE);
-			nameField.setText("");
-			passwordField.setText("");
 		}
 
+		if (!content.isEmpty() && i.getInboxTable().getModel().getClass() != BDATableModel.class) {
+			i.getInboxTable().setModel(new BDATableModel(content));
+			i.getInboxTable().getColumnModel().getColumn(3)
+					.setPreferredWidth((int) (i.getInboxTable().getWidth() * 0.4));
+		} else {
+			for (Content c : content) {
+				((BDATableModel) i.getInboxTable().getModel()).addRow(c);
+				((AbstractTableModel) i.getInboxTable().getModel()).fireTableDataChanged();
+			}
+		}
 	}
 
 }
+
+

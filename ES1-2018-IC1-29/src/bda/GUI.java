@@ -3,7 +3,9 @@ package bda;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
+import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.swing.*;
 
@@ -140,8 +142,8 @@ public class GUI {
 			public void mouseClicked(MouseEvent evnt) {
 				BDATableModel model = (BDATableModel) t.getModel();
 				try {
-					new ContentGUI(model.getMessageAt(t.getSelectedRow()));
-				} catch (HeadlessException | MessagingException e) {
+					new ContentGUI((Message) model.getMessageAt(t.getSelectedRow()));
+				} catch (HeadlessException | MessagingException | IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -163,8 +165,18 @@ public class GUI {
 	 * 
 	 * @return JTextField (conta de email do utilizador)
 	 */
-	public JTextField getLog3() {
-		return log3;
+	public JTextField getLog(int i) {
+		switch (i) {
+		case 1:
+			return log1;
+		case 2:
+			return log2;
+		case 3:
+			return log3;
+		default:
+			return null;
+		}
+
 	}
 
 	/**
@@ -182,3 +194,4 @@ public class GUI {
 	}
 
 }
+

@@ -128,6 +128,10 @@ public class BDAButton {
 	public boolean getState() {
 		return state;
 	}
+	
+	public String getIconName () {
+		return iconName;
+	}
  
 	/**
 	 * Método que ordena cronologicamente a informação da inbox
@@ -148,3 +152,4 @@ public class BDAButton {
 	}
 
 }
+
