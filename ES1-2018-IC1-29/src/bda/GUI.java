@@ -142,7 +142,7 @@ public class GUI {
 			public void mouseClicked(MouseEvent evnt) {
 				BDATableModel model = (BDATableModel) t.getModel();
 				try {
-					new ContentGUI((Message) model.getMessageAt(t.getSelectedRow()));
+					new ContentGUI((Content) model.getMessageAt(t.getSelectedRow()));
 				} catch (HeadlessException | MessagingException | IOException e) {
 					e.printStackTrace();
 				}

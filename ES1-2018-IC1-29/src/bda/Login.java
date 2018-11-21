@@ -215,6 +215,26 @@ public class Login extends JDialog {
 		}
 	}
 
+	public void logout() {
+		ArrayList<Content> remove = new ArrayList<Content>();
+
+		if (type.equals("email"))
+			i.getLog(3).setText("Not Logged In   ");
+
+		if (type.equals("twitter"))
+			i.getLog(2).setText("Not Logged In   ");
+
+		for (Content c : ((BDATableModel) i.getInboxTable().getModel()).getTableContent()) {
+			if (c.getType().equals(type))
+				remove.add(c);
+		}
+
+		for (Content r : remove) {
+			((BDATableModel) i.getInboxTable().getModel()).getTableContent().remove(r);
+		}
+		remove.clear();
+		((AbstractTableModel) i.getInboxTable().getModel()).fireTableDataChanged();
+
+	}
+
 }
-
-

@@ -44,8 +44,13 @@ public class ContentGUI {
 	private JTextArea text; //*
 	private JButton send; //*
 
-	public ContentGUI(Message m) throws HeadlessException, MessagingException {
-		frame = new JFrame(m.getSubject().toString());
+	public ContentGUI(Content content) throws HeadlessException, MessagingException {
+		try {
+			frame = new JFrame(content.getSubject().toString());
+		} catch (IOException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
 		frame.setSize(width, height);
 		frame.setLocation(widthLocation, heightLocation);
 		
@@ -53,9 +58,15 @@ public class ContentGUI {
 		north.setLayout(new BorderLayout()); //*
 		north.setPreferredSize(new Dimension(0, 60)); 
 		
-		Address[] froms = m.getFrom(); //*
+		String froms = null;
+		try {
+			froms = content.getFrom();
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		} //*
 		
-		sender = new JLabel("From:   " + ((InternetAddress) froms[0]).getAddress()); //*
+		sender = new JLabel("From:   " + froms); //*
 		sender.setFont(new Font("Arial", Font.PLAIN, 18));
 		north.add(sender, BorderLayout.WEST); //*
 		center.setLayout(new BorderLayout()); //*
@@ -76,7 +87,13 @@ public class ContentGUI {
 		
 		JTextArea t = new JTextArea();
 		t.setEditable(false);
-		String hash = createHashCode(m);
+		String hash = null;
+		try {
+			hash = content.getHashCode();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		t.append("\n");//*
 		
 		try (Scanner scanner = new Scanner(

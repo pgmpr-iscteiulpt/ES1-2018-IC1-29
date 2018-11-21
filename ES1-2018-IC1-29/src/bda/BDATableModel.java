@@ -77,17 +77,18 @@ public class BDATableModel extends AbstractTableModel {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Método que devolve uma String com o nome da coluna
 	 * 
 	 * @return Message (de uma determinada coluna)
-	 * @throws MessagingException 
-	 * @throws IOException 
+	 * @throws MessagingException
+	 * @throws IOException
 	 */
-	
-	public Object getMessageAt (int row) throws IOException, MessagingException {
-		return content.get(row).getContent();
+
+	public Content getMessageAt(int row) throws IOException, MessagingException {
+		return content.get(row);
+
 	}
 
 	/**
@@ -98,11 +99,13 @@ public class BDATableModel extends AbstractTableModel {
 	public String getColumnName(int column) {
 		return columnNames[column];
 	}
-	
-	public void addRow (Content c) {
+
+	public void addRow(Content c) {
 		content.add(c);
 	}
 
+	public ArrayList<Content> getTableContent() {
+		return content;
+	}
+
 }
-
-

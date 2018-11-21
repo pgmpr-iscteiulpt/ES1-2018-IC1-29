@@ -18,17 +18,17 @@ public class Content {
 	public Content(Message msg) {
 		this.msg = msg;
 		this.status = null;
-		type = "Email";
+		type = "email";
 	}
 
 	public Content(Status status) {
 		this.msg = null;
 		this.status = status;
-		type = "Twitter";
+		type = "twitter";
 	}
 
 	public Object getContent() throws IOException, MessagingException {
-		if (type.equals("Email"))
+		if (type.equals("email"))
 			return msg;
 		else
 			return status;
@@ -43,10 +43,10 @@ public class Content {
 		String[] date = null;
 		String[] time = null;
 
-		if (type.equals("Email"))
+		if (type.equals("email"))
 			date = ((Message) this.getContent()).getSentDate().toString().split(" ");
 
-		if (type.equals("Twitter"))
+		if (type.equals("twitter"))
 			date = ((Status) this.getContent()).getCreatedAt().toString().split(" ");
 
 		time = date[3].split(":");
@@ -57,10 +57,10 @@ public class Content {
 
 	public String getDate() throws MessagingException, IOException {
 		String date = null;
-		if (type.equals("Email"))
+		if (type.equals("email"))
 			date = ((Message) this.getContent()).getSentDate().toString();
 
-		if (type.equals("Twitter"))
+		if (type.equals("twitter"))
 			date = ((Status) this.getContent()).getCreatedAt().toString();
 
 		return date;
@@ -69,7 +69,7 @@ public class Content {
 
 	public String getFrom() throws MessagingException, IOException {
 
-		if (type.equals("Email")) {
+		if (type.equals("email")) {
 			Address[] a = ((Message) this.getContent()).getFrom();
 			return ((InternetAddress) a[0]).getAddress();
 		} else
@@ -79,7 +79,7 @@ public class Content {
 
 	public String getSubject() throws MessagingException, IOException {
 
-		if (type.equals("Email"))
+		if (type.equals("email"))
 			return ((Message) this.getContent()).getSubject().toString();
 
 		else
