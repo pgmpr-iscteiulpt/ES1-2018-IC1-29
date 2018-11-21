@@ -1,5 +1,7 @@
 package bda;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import twitter4j.Status;
@@ -22,15 +24,19 @@ public class FetchTweets {
 			twitter4j.Twitter twitter = tf.getInstance();
 
 			List<Status> statuses = twitter.getHomeTimeline();
-			int counter = 0;
-			int counterTotal = 0;
+
 			for (Status s : statuses) {
-				status.add(new Content(s));
-//FILTRO		if (s.getUser().getName() != null && s.getUser().getName().contains("ISCTE")) {
-				counter++;
-//			}
-				counterTotal++;
+				Content c = new Content(s);
+				status.add(c);
+				String hash = c.getHashCode();
+				PrintWriter writer = new PrintWriter(
+						System.getProperty("user.dir") + File.separator + "Tweets\\Tweet" + hash, "UTF-8");
+				writer.println((c.getContent()).toString());
+				writer.close();
 			}
+
+//FILTRO	if (s.getUser().getName() != null && s.getUser().getName().contains("ISCTE")) {
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -42,4 +48,3 @@ public class FetchTweets {
 
 	}
 }
-

@@ -2,14 +2,9 @@ package bda;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.mail.Address;
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
 import javax.swing.table.AbstractTableModel;
 
-import twitter4j.Status;
 
 /**
  * Implementa um modelo de JTable adaptado à listagem de emails e posts

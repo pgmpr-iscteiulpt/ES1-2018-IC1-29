@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.table.AbstractTableModel;
@@ -153,9 +152,9 @@ public class BDAButton {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Content> a = ((BDATableModel) i.getInboxTable().getModel()).getTableContent();
 				if (order) {
-		//			Collections.sort(a, new DateComparator());
+					Collections.sort(a, new DateComparator());
 				} else {
-		//			Collections.sort(a, Collections.reverseOrder(new DateComparator()));
+					Collections.sort(a, Collections.reverseOrder(new DateComparator()));
 				}
 				((AbstractTableModel) i.getInboxTable().getModel()).fireTableDataChanged();
 

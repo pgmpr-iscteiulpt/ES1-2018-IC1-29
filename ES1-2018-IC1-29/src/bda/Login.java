@@ -12,8 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-
-import javax.mail.Message;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
