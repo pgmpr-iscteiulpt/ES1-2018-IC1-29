@@ -16,7 +16,7 @@ import javax.swing.table.AbstractTableModel;
  * funcionalidade
  * 
  * @author Grupo 29
- * @version 1.0
+ * @version 2.0
  */
 
 public class BDAButton {
@@ -133,11 +133,14 @@ public class BDAButton {
 	 * 
 	 * @return boolean (state)
 	 */
-
 	public boolean getState() {
 		return state;
 	}
 
+	/**
+	 * Método que devolve o nome de um botão
+	 * @return String (iconName)
+	 */
 	public String getIconName() {
 		return iconName;
 	}

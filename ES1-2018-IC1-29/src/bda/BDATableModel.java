@@ -7,10 +7,10 @@ import javax.swing.table.AbstractTableModel;
 
 
 /**
- * Implementa um modelo de JTable adaptado à listagem de emails e posts
+ * Implementa um modelo de JTable adaptado à listagem de emails, tweets e posts
  * 
  * @author Grupo 29
- * @version 1.0
+ * @version 2.0
  */
 
 @SuppressWarnings("serial")
@@ -20,9 +20,9 @@ public class BDATableModel extends AbstractTableModel {
 	private String[] columnNames = new String[] { "Data e Hora", "Fonte", "Remetente", "Assunto" };
 
 	/**
-	 * Construtor que recebe uma lista de mensagens para apresentar
+	 * Construtor que recebe uma lista de conteúdos para apresentar
 	 * 
-	 * @param msgs Mensagem a apresentar
+	 * @param content ArrayList<Content> a apresentar
 	 */
 	public BDATableModel(ArrayList<Content> content) {
 		this.content = content;
@@ -76,7 +76,7 @@ public class BDATableModel extends AbstractTableModel {
 	/**
 	 * Método que devolve uma String com o nome da coluna
 	 * 
-	 * @return Message (de uma determinada coluna)
+	 * @return Content (de uma determinada coluna)
 	 * @throws MessagingException
 	 * @throws IOException
 	 */
@@ -94,10 +94,19 @@ public class BDATableModel extends AbstractTableModel {
 		return columnNames[column];
 	}
 
+	/**
+	 * Método que adiciona uma linha à lista de conteúdos
+	 * 
+	 * @param c Content
+	 */
 	public void addRow(Content c) {
 		content.add(c);
 	}
 
+	/**
+	 * Método que retorna um arraylist com o conteúdo da tabela
+	 * @return content ArrayList<Content>
+	 */
 	public ArrayList<Content> getTableContent() {
 		return content;
 	}

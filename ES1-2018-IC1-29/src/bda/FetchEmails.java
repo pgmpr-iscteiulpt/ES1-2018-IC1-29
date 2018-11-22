@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 import javax.mail.Folder;
 import javax.mail.Message;
-import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
 
@@ -15,16 +14,16 @@ import javax.mail.Store;
  * e password corretos são fornecidos
  * 
  * @author Grupo 29
- * @version 1.0
+ * @version 2.0
  */
 public class FetchEmails {
 
 	private ArrayList<Content> msgs = new ArrayList<Content>();
 
 	/**
-	 * Método que devolve um vector de Mensagens
+	 * Método que devolve um arraylist de Conteúdos
 	 * 
-	 * @return Vector (mensagens que constam no mail do utilizador)
+	 * @return msgs ArrayList<Content> (mensagens que constam no mail do utilizador)
 	 */
 	public ArrayList<Content> getMsgs() {
 		return msgs;

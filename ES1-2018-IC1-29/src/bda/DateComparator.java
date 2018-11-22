@@ -4,7 +4,12 @@ import java.io.IOException;
 import java.util.Comparator;
 
 import javax.mail.MessagingException;
-
+/**
+ * Cria um enumerado que representa os meses em formato de data
+ * 
+ * @author Grupo 29
+ * @version 2.0
+ */
 enum Months {
 	Jan(0), Feb(1), Mar(2), Apr(3), May(4), Jun(5), Jul(6), Aug(7), Sep(8), Oct(9), Nov(10), Dec(11);
 
@@ -20,6 +25,12 @@ enum Months {
 
 }
 
+/**
+ * Cria uma classe que compara dois conteúdos
+ * 
+ * @author Grupo 29
+ * @version 2.0
+ */
 public class DateComparator implements Comparator<Content> {
 
 	@SuppressWarnings("null")

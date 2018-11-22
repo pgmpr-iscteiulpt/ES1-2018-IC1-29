@@ -8,10 +8,25 @@ import twitter4j.Status;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
+/**
+ * Acede à caixa de entrada de uma conta do twitter tendo em conta que o username
+ * e password fornecidos são corretos
+ * 
+ * @author Grupo 29
+ * @version 2.0
+ */
+
 public class FetchTweets {
 
 	private ArrayList<Content> status = new ArrayList<Content>();
 
+	/**
+	 * Método que confirma se o username e password fornecidos estão corretos e
+	 * acede à conta do twitter
+	 * 
+	 * @param username String (username do utilizador)
+	 * @param password String (password do utilizador)
+	 */
 	public void checkTweets() {
 		try {
 			ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -43,6 +58,11 @@ public class FetchTweets {
 
 	}
 
+	/**
+	 * Método que devolve um arraylist de Conteúdos
+	 * 
+	 * @return status ArrayList<Content> (tweets que constam no twitter do utilizador)
+	 */
 	public ArrayList<Content> getStatus() {
 		return status;
 

@@ -12,7 +12,7 @@ import javax.swing.*;
  * integração de informação académica com origem em vários sistemas
  * 
  * @author Grupo 29
- * @version 1.0
+ * @version 2.0
  */
 
 public class GUI {
@@ -135,6 +135,12 @@ public class GUI {
 
 	}
 
+
+	/**
+	 * Método que permite a visualização de uma nova Janela 
+	 * referente apenas ao conteúdo selecionado
+	 * @param t JTable
+	 */
 	private void addTableListener(JTable t) {
 		t.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {
@@ -152,7 +158,7 @@ public class GUI {
 	/**
 	 * Método que devolve uma JTextField
 	 * 
-	 * @return JTextField (conta de email do utilizador)
+	 * @return JTextField (conta do utilizador)
 	 */
 	public JTextField getLog(int i) {
 		switch (i) {

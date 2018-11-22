@@ -25,7 +25,7 @@ import javax.swing.table.AbstractTableModel;
  * Implementa uma JPanel que está associada a uma interface e um botão
  * 
  * @author Grupo 29
- * @version 1.0
+ * @version 2.0
  */
 
 @SuppressWarnings("serial")
@@ -211,7 +211,10 @@ public class Login extends JDialog {
 			}
 		}
 	}
-
+	
+	/**
+	 * Método que permite o utilizador fazer Loggout
+	 */
 	public void logout() {
 		ArrayList<Content> remove = new ArrayList<Content>();
 

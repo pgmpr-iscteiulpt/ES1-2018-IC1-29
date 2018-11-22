@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
-import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,6 +20,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+/**
+ * Cria uma JFrame representativa da interface referente apenas ao conteúdo selecionado
+ * 
+ * @author Grupo 29
+ * @version 2.0
+ */
 public class ContentGUI {
 
 	private JFrame frame;
@@ -38,6 +43,11 @@ public class ContentGUI {
 	private JTextArea text;
 	private JButton send;
 
+	/**
+	 * Construtor de uma interface referente ao conteúdo
+	 * @param s Status que representa o conteúdo
+	 * @throws MessagingException
+	 */
 	public ContentGUI(Content content) throws HeadlessException, MessagingException {
 		frame = new JFrame(content.getType());
 		frame.setSize(width, height);
@@ -102,6 +112,10 @@ public class ContentGUI {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * Método que possibilita a resposta por parte 
+	 * do utilizador para o remetente do conteúdo
+	 */
 	public void addOperations() {
 		reply.addActionListener(new ActionListener() {
 
