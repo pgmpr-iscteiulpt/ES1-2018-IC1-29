@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Properties;
 import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
 
@@ -53,12 +55,13 @@ public class FetchEmails {
 			for (int i = 1; i <= inbox.getMessages().length; i++) {
 				msgs.add(new Content (inbox.getMessage(i)));
 			}
-			
+		
 			for (Content c : msgs) {
 				String hash = c.getHashCode();
 				PrintWriter writer = new PrintWriter(
 						System.getProperty("user.dir") + File.separator + "Emails\\Email" + hash, "UTF-8");
-				writer.println((c.getContent()).toString());
+				Message b = (Message) c.getContent();
+				writer.println(b.getContent());
 				writer.close();
 			}
 

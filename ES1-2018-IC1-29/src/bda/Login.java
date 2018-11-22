@@ -181,10 +181,7 @@ public class Login extends JDialog {
 				FetchEmails email = new FetchEmails();
 				email.checkMail(getUsername(), getPassword());
 				content = email.getMsgs();
-				b.changeImage();
-				b.changeState();
 				i.getLog(3).setText(nameField.getText());
-				login.dispose();
 			} catch (Exception E) {
 				JOptionPane.showMessageDialog(Login.this, "Invalid username or password", "Login",
 						JOptionPane.ERROR_MESSAGE);
@@ -195,11 +192,12 @@ public class Login extends JDialog {
 		if (type.equals("twitter")) {
 			FetchTweets twitter = new FetchTweets();
 			content = twitter.getStatus();
-			b.changeImage();
-			b.changeState();
 			i.getLog(2).setText("@Grupo29");
-			login.dispose();
 		}
+
+		b.changeImage();
+		b.changeState();
+		login.dispose();
 
 		if (!content.isEmpty() && i.getInboxTable().getModel().getClass() != BDATableModel.class) {
 			i.getInboxTable().setModel(new BDATableModel(content));

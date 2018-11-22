@@ -83,7 +83,6 @@ public class BDATableModel extends AbstractTableModel {
 
 	public Content getMessageAt(int row) throws IOException, MessagingException {
 		return content.get(row);
-
 	}
 
 	/**

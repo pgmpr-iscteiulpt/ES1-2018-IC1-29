@@ -150,15 +150,6 @@ public class GUI {
 	}
 
 	/**
-	 * Método que permite a visualização da Janela
-	 */
-	public void open() {
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setVisible(true);
-	}
-
-	/**
 	 * Método que devolve uma JTextField
 	 * 
 	 * @return JTextField (conta de email do utilizador)
@@ -186,10 +177,18 @@ public class GUI {
 		return inboxTable;
 	}
 
+	/**
+	 * Método que permite a visualização da Janela
+	 */
+	public void open() {
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+	}
+
 	public static void main(String[] args) {
 		GUI g = new GUI();
 		g.open();
 	}
 
 }
-
