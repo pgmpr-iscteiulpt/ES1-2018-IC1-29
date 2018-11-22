@@ -134,10 +134,4 @@ public class ContentGUI {
 		});
 	}
 
-	private String createHashCode(Message m) throws MessagingException {
-		String[] date = m.getSentDate().toString().split(" ");
-		String[] time = date[3].split(":");
-		String hash = date[0] + date[1] + date[2] + date[5] + time[0] + time[1] + time[2];
-		return hash;
-	}
 }

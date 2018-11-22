@@ -191,6 +191,7 @@ public class Login extends JDialog {
 		}
 		if (type.equals("twitter")) {
 			FetchTweets twitter = new FetchTweets();
+			twitter.checkTweets();
 			content = twitter.getStatus();
 			i.getLog(2).setText("@Grupo29");
 		}

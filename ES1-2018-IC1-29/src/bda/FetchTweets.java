@@ -12,7 +12,7 @@ public class FetchTweets {
 
 	private ArrayList<Content> status = new ArrayList<Content>();
 
-	public FetchTweets() {
+	public void checkTweets() {
 		try {
 			ConfigurationBuilder cb = new ConfigurationBuilder();
 			cb.setDebugEnabled(true).setOAuthConsumerKey("AWYJQX6EFgYwtAj0mvND4mAB4")
