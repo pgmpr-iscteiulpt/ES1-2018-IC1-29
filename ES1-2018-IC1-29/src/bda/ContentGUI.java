@@ -88,9 +88,9 @@ public class ContentGUI {
 		try {
 			hash = content.getHashCode();
 			if (content.getType().equals("email"))
-				hash = "Emails\\Email" + hash;
+				hash = "Resources\\Emails\\Email" + hash;
 			else
-				hash = "Tweets\\Tweet" + hash;
+				hash = "Resources\\Tweets\\Tweet" + hash;
 			Scanner scanner = new Scanner(
 					new FileReader(new File(System.getProperty("user.dir") + File.separator + hash)));
 			String s;

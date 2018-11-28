@@ -32,9 +32,9 @@ public class GUI {
 	private final int heightLocation = screenDim.height / 2 - height / 2;
 
 	// Buttons and table
-	private BDAButton facebookButton = new BDAButton(this, "face");
-	private BDAButton mailButton = new BDAButton(this, "email");
-	private BDAButton twitterButton = new BDAButton(this, "twitter");
+	private BDAButton facebookButton = new BDAButton(this, "Facebook");
+	private BDAButton mailButton = new BDAButton(this, "Email");
+	private BDAButton twitterButton = new BDAButton(this, "Twitter");
 	private BDAButton recent = new BDAButton(this, "recent", true);
 	private BDAButton old = new BDAButton(this, "old", false);
 	private JTable inboxTable;
@@ -85,21 +85,21 @@ public class GUI {
 		log3.setPreferredSize(logSize);
 		header.add(accountsPanel, BorderLayout.EAST);
 
-		Image imageFace = new ImageIcon("images/faceOn.png").getImage().getScaledInstance(logImagesSize.width,
+		Image imageFace = new ImageIcon("images/FacebookOn.png").getImage().getScaledInstance(logImagesSize.width,
 				logImagesSize.height, java.awt.Image.SCALE_SMOOTH);
 		JPanel a = new JPanel();
 		a.add(new JLabel(new ImageIcon(imageFace)));
 		a.add(log1);
 		accountsPanel.add(a);
 
-		Image imageTwitter = new ImageIcon("images/twitterOn.png").getImage().getScaledInstance(logImagesSize.width,
+		Image imageTwitter = new ImageIcon("images/TwitterOn.png").getImage().getScaledInstance(logImagesSize.width,
 				logImagesSize.height, java.awt.Image.SCALE_SMOOTH);
 		JPanel b = new JPanel();
 		b.add(new JLabel(new ImageIcon(imageTwitter)));
 		b.add(log2);
 		accountsPanel.add(b);
 
-		Image imageMail = new ImageIcon("images/emailOn.png").getImage().getScaledInstance(logImagesSize.width,
+		Image imageMail = new ImageIcon("images/EmailOn.png").getImage().getScaledInstance(logImagesSize.width,
 				logImagesSize.height, java.awt.Image.SCALE_SMOOTH);
 		JPanel c = new JPanel();
 		c.add(new JLabel(new ImageIcon(imageMail)));

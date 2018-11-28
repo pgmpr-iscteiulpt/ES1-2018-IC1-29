@@ -45,7 +45,7 @@ public class FetchTweets {
 				status.add(c);
 				String hash = c.getHashCode();
 				PrintWriter writer = new PrintWriter(
-						System.getProperty("user.dir") + File.separator + "Tweets\\Tweet" + hash, "UTF-8");
+						System.getProperty("user.dir") + File.separator + "Resources\\Tweets\\Tweet" + hash, "UTF-8");
 				writer.println(((Status) c.getContent()).getText());
 				writer.close();
 			}

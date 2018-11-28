@@ -58,7 +58,7 @@ public class FetchEmails {
 			for (Content c : msgs) {
 				String hash = c.getHashCode();
 				PrintWriter writer = new PrintWriter(
-						System.getProperty("user.dir") + File.separator + "Emails\\Email" + hash, "UTF-8");
+						System.getProperty("user.dir") + File.separator + "Resources\\Emails\\Email" + hash, "UTF-8");
 				Message b = (Message) c.getContent();
 				writer.println(b.getContent());
 				writer.close();
