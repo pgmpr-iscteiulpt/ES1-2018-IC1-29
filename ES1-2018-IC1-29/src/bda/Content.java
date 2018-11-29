@@ -67,14 +67,13 @@ public class Content {
 	 * @throws MessagingException
 	 */
 	public Object getContent() throws IOException, MessagingException {
-		switch (type) {
-		case "Email":
+		if (type.equals("Email"))
 			return msg;
-		case "Twitter":
+		if (type.equals("Twitter"))
 			return status;
-		case "Facebook":
+		if (type.equals("Facebook"))
 			return post;
-		}
+		
 		return null;
 	}
 
