@@ -125,7 +125,7 @@ public class GUI {
 
 		// Build table
 		inboxTable = new JTable();
-		addTableListener(inboxTable);
+		addTableListener(inboxTable, this);
 		JScrollPane scrollInbox = new JScrollPane(inboxTable);
 		scrollInbox.setViewportView(inboxTable);
 		scrollInbox.setPreferredSize(inboxSize);
@@ -141,12 +141,12 @@ public class GUI {
 	 * referente apenas ao conteúdo selecionado
 	 * @param t JTable
 	 */
-	private void addTableListener(JTable t) {
+	private void addTableListener(JTable t, GUI i) {
 		t.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {
 				BDATableModel model = (BDATableModel) t.getModel();
 				try {
-					new ContentGUI((Content) model.getMessageAt(t.getSelectedRow()));
+					new ContentGUI((Content) model.getMessageAt(t.getSelectedRow()), i);
 				} catch (HeadlessException | MessagingException | IOException e) {
 					e.printStackTrace();
 				}

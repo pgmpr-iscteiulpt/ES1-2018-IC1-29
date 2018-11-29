@@ -52,6 +52,7 @@ public class Login extends JDialog {
 	private JButton okButton = new JButton("Ok");
 	private JButton cancelButton = new JButton("Cancel");
 	private String type;
+	private Object contentHandler;
 	private ArrayList<Content> content = new ArrayList<Content>();
 
 	private GUI i;
@@ -187,6 +188,7 @@ public class Login extends JDialog {
 				email.checkMail(getUsername(), getPassword());
 				content = email.getMsgs();
 				i.getLog(3).setText(nameField.getText());
+				contentHandler = email;
 			} catch (Exception E) {
 				JOptionPane.showMessageDialog(Login.this, "Invalid username or password", "Login",
 						JOptionPane.ERROR_MESSAGE);
@@ -199,6 +201,7 @@ public class Login extends JDialog {
 			twitter.checkTweets();
 			content = twitter.getStatus();
 			i.getLog(2).setText("@Grupo29");
+			contentHandler = twitter;
 		}
 		
 		if (type.equals("Facebook")) {
@@ -206,6 +209,7 @@ public class Login extends JDialog {
 			facebook.checkPosts();
 			content = facebook.getPosts();
 			i.getLog(1).setText(facebook.getUserName());
+			contentHandler = facebook;
 		}
 
 		b.changeImage();
@@ -222,6 +226,12 @@ public class Login extends JDialog {
 				((AbstractTableModel) i.getInboxTable().getModel()).fireTableDataChanged();
 			}
 		}
+		
+		ArrayList<Object> handlers = ((BDATableModel) i.getInboxTable().getModel()).getContentHandlers();
+		
+		
+		if (!handlers.contains(contentHandler))
+			((BDATableModel) i.getInboxTable().getModel()).addContentHandler(contentHandler);
 	}
 	
 	/**

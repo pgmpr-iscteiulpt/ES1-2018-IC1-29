@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import javax.mail.MessagingException;
 import javax.swing.ImageIcon;
@@ -29,6 +30,7 @@ import javax.swing.JTextArea;
 public class ContentGUI {
 
 	private JFrame frame;
+	private GUI i;
 	private final Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
 	private final int width = (int) (0.7 * screenDim.width);
 	private final int height = (int) (0.9 * screenDim.height);
@@ -48,8 +50,9 @@ public class ContentGUI {
 	 * @param s Status que representa o conteúdo
 	 * @throws MessagingException
 	 */
-	public ContentGUI(Content content) throws HeadlessException, MessagingException {
+	public ContentGUI(Content content, GUI i) throws HeadlessException, MessagingException {
 		frame = new JFrame(content.getType());
+		this.i = i;
 		frame.setSize(width, height);
 		frame.setLocation(widthLocation, heightLocation);
 		frame.setLayout(new BorderLayout());
@@ -78,7 +81,7 @@ public class ContentGUI {
 		reply.setPreferredSize(new Dimension(50, 50));
 		center.add(reply, BorderLayout.SOUTH);
 		// south.add(reply , BorderLayout.NORTH);
-		addOperations(); // *
+		addOperations(from.toString()); 
 
 		JTextArea t = new JTextArea();
 		t.setEditable(false);
@@ -119,7 +122,7 @@ public class ContentGUI {
 	 * Método que possibilita a resposta por parte 
 	 * do utilizador para o remetente do conteúdo
 	 */
-	public void addOperations() {
+	public void addOperations(String from) {
 		reply.addActionListener(new ActionListener() {
 
 			@Override
@@ -135,6 +138,14 @@ public class ContentGUI {
 
 				send = new JButton("Send", icon);
 				send.setPreferredSize(new Dimension(200, 50));
+				send.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						ArrayList<Object> f = ((BDATableModel) i.getInboxTable().getModel()).getContentHandlers();
+						((FetchEmails) f.get(0)).sendEmail(from, "es1.grupo29@gmail.com", "Subject", text.getText());
+					}
+				});
 
 				south.add(text, BorderLayout.CENTER);
 				JPanel n = new JPanel();
