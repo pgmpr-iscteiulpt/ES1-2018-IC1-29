@@ -11,7 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.mail.MessagingException;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -20,6 +23,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
+
+import com.restfb.types.Post;
 
 /**
  * Implementa uma JPanel que está associada a uma interface e um botão
@@ -172,11 +177,11 @@ public class Login extends JDialog {
 	// Login nos canais
 	/**
 	 * Método que permite averiguar se o email e password dados pelo utilizador são
-	 * válidos para efetuar o Login
+	 * válidos para efetuar o Login 
 	 */
 	public void login() {
 
-		if (type.equals("email")) {
+		if (type.equals("Email")) {
 			try {
 				FetchEmails email = new FetchEmails();
 				email.checkMail(getUsername(), getPassword());
@@ -189,11 +194,18 @@ public class Login extends JDialog {
 				passwordField.setText("");
 			}
 		}
-		if (type.equals("twitter")) {
+		if (type.equals("Twitter")) {
 			FetchTweets twitter = new FetchTweets();
 			twitter.checkTweets();
 			content = twitter.getStatus();
 			i.getLog(2).setText("@Grupo29");
+		}
+		
+		if (type.equals("Facebook")) {
+			FetchPosts facebook = new FetchPosts();
+			facebook.checkPosts();
+			content = facebook.getPosts();
+			i.getLog(1).setText(facebook.getUserName());
 		}
 
 		b.changeImage();
@@ -218,10 +230,10 @@ public class Login extends JDialog {
 	public void logout() {
 		ArrayList<Content> remove = new ArrayList<Content>();
 
-		if (type.equals("email"))
+		if (type.equals("Email"))
 			i.getLog(3).setText("Not Logged In   ");
 
-		if (type.equals("twitter"))
+		if (type.equals("Twitter"))
 			i.getLog(2).setText("Not Logged In   ");
 
 		for (Content c : ((BDATableModel) i.getInboxTable().getModel()).getTableContent()) {
@@ -238,3 +250,4 @@ public class Login extends JDialog {
 	}
 
 }
+

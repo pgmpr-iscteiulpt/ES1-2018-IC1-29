@@ -179,10 +179,9 @@ public class Content {
 			return ((Status) this.getContent()).getText();
 
 		if (type.equals("Facebook"))
-			return ((Post) this.getContent()).getDescription().toString();
+			return ((Post) this.getContent()).getMessage();
 		
 		return null;
 
 	}
 }
-
