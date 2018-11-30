@@ -31,6 +31,7 @@ public class ContentGUI {
 
 	private JFrame frame;
 	private GUI i;
+	private Content content;
 	private final Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
 	private final int width = (int) (0.7 * screenDim.width);
 	private final int height = (int) (0.9 * screenDim.height);
@@ -44,6 +45,8 @@ public class ContentGUI {
 	private JLabel sender;
 	private JTextArea text;
 	private JButton send;
+	
+	private long id;
 
 	/**
 	 * Construtor de uma interface referente ao conteúdo
@@ -53,6 +56,7 @@ public class ContentGUI {
 	public ContentGUI(Content content, GUI i) throws HeadlessException, MessagingException {
 		frame = new JFrame(content.getType());
 		this.i = i;
+		this.content = content;
 		frame.setSize(width, height);
 		frame.setLocation(widthLocation, heightLocation);
 		frame.setLayout(new BorderLayout());
@@ -80,7 +84,6 @@ public class ContentGUI {
 		reply = new JButton("Reply", icon);
 		reply.setPreferredSize(new Dimension(50, 50));
 		center.add(reply, BorderLayout.SOUTH);
-		// south.add(reply , BorderLayout.NORTH);
 		addOperations(from.toString()); 
 
 		JTextArea t = new JTextArea();
@@ -92,13 +95,14 @@ public class ContentGUI {
 			hash = content.getHashCode();
 			if (content.getType().equals("Email"))
 				hash = "Resources\\Emails\\Email" + hash;
-			if (content.getType().equals("Tweet"))
+			if (content.getType().equals("Twitter"))
 				hash = "Resources\\Tweets\\Tweet" + hash;
 			if (content.getType().equals("Facebook"))
 				hash = "Resources\\Posts\\Post" + hash;
 			
 			Scanner scanner = new Scanner(
 					new FileReader(new File(System.getProperty("user.dir") + File.separator + hash)));
+			id = Long.valueOf(scanner.nextLine());
 			String s;
 			t.append("\n");
 			t.append("\n" + "ASSUNTO:   " + content.getSubject().toString() + "\n" + "\n");
@@ -143,7 +147,27 @@ public class ContentGUI {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						ArrayList<Object> f = ((BDATableModel) i.getInboxTable().getModel()).getContentHandlers();
-						((FetchEmails) f.get(0)).sendEmail(from, "es1.grupo29@gmail.com", "Subject", text.getText());
+						
+						if (content.getType().equals("Email")) {
+							FetchEmails email = null;
+							for (Object cH: f) {
+								if (cH instanceof FetchEmails)
+									email = (FetchEmails) cH;
+							}
+							
+							email.sendEmail(from, "es1.grupo29@gmail.com", "Subject", text.getText());
+						}else {
+							if (content.getType().equals("Twitter")) {
+								FetchTweets twitter = null;
+								for (Object cH: f) {
+									if (cH instanceof FetchTweets)
+										twitter = (FetchTweets) cH;
+								}
+								
+								twitter.replyTweet(id, text.getText());
+								
+							}
+						}
 					}
 				});
 

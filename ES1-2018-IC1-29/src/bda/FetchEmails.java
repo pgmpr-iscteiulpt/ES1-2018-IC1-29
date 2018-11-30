@@ -7,7 +7,6 @@ import java.util.Properties;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
@@ -24,12 +23,12 @@ import javax.mail.internet.MimeMessage;
 public class FetchEmails {
 
 	private ArrayList<Content> msgs = new ArrayList<Content>();
+	private String userName;
 	private Properties props = new Properties();
 	private Session session;
 	private Store store;
 	private Folder inbox;
-	private String username;
-	private String password;
+
 
 	/**
 	 * Método que devolve um arraylist de Conteúdos
@@ -40,15 +39,13 @@ public class FetchEmails {
 		return msgs;
 	}
 
-
-
 	public void setProperties() {
 		props.setProperty("mail.store.protocol", "imaps");
 		props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
+		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.port", "465");
 	}
 
 	/**
@@ -58,16 +55,17 @@ public class FetchEmails {
 	 * @param username String (username do utilizador)
 	 * @param password String (password do utilizador)
 	 */
-	public void checkMail(String username, String password) {
-		  setProperties();
-        	this.username = username;
-        	this.password = password;
+	public void checkMail(String userName, String password) {
+		setProperties();
+		
+		this.userName = userName;
+
 		try {
-			Session session = Session.getInstance(props, null);
-			Store store = session.getStore();
+			session = Session.getInstance(props, null);
+			store = session.getStore();
 			try {
-				store.connect("imap.gmail.com", username, password);
-			} catch (Exception e) { // descobrir nome
+				store.connect("imap.gmail.com", userName, password);
+			} catch (Exception e) {
 				System.out.println("invalid user and pass");
 				return;
 			}
@@ -75,9 +73,9 @@ public class FetchEmails {
 			inbox.open(Folder.READ_ONLY);
 
 			for (int i = 1; i <= inbox.getMessages().length; i++) {
-				msgs.add(new Content (inbox.getMessage(i)));
+				msgs.add(new Content(inbox.getMessage(i), userName));
 			}
-		
+
 			for (Content c : msgs) {
 				String hash = c.getHashCode();
 				PrintWriter writer = new PrintWriter(
@@ -93,50 +91,38 @@ public class FetchEmails {
 
 	}
 
-	public void sendEmail (String to, String from, String subject, String text) {
-//		String to = "es1.grupo29@gmail.com";
-//		String from = "es1.grupo29@gmail.com";
-//		String username = "es1.grupo29@gmail.com";
-//		String password = "tenhosono";
+	public void sendEmail(String to, String from, String subject, String text) {
 
-	      // Get the Session object.
-	      Session session = Session.getInstance(props,
-	         new javax.mail.Authenticator() {
-	            protected PasswordAuthentication getPasswordAuthentication() {
-	               return new PasswordAuthentication(username, password);
-		   }
-	         });
+		try {
 
-	      try {
-	   
-		   // Create a default MimeMessage object.
-		   Message message = new MimeMessage(session);
-		
-		   // Set From: header field of the header.
-		   message.setFrom(new InternetAddress(from));
-		
-		   // Set To: header field of the header.
-		   message.setRecipients(Message.RecipientType.TO,
-	               InternetAddress.parse(to));
-		
-		   // Set Subject: header field
-		   message.setSubject(subject);
-		
-		   // Now set the actual message
-		   message.setText(text);
+			// Create a default MimeMessage object.
+			Message message = new MimeMessage(session);
 
-		   // Send message
-		   Transport.send(message);
+			// Set From: header field of the header.
+			message.setFrom(new InternetAddress(from));
 
-		   System.out.println("Sent message successfully....");
+			// Set To: header field of the header.
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 
-	      } catch (MessagingException e) {
-	         throw new RuntimeException(e);
-	      }
-		
+			// Set Subject: header field
+			message.setSubject(subject);
+
+			// Now set the actual message
+			message.setText(text);
+
+			// Send message
+			Transport.send(message);
+
+			System.out.println("Sent message successfully....");
+
+		} catch (MessagingException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
+	
+	public String getUserName() {
+		return userName;
 	}
 
-
 }
-
-

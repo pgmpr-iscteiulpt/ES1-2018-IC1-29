@@ -54,8 +54,6 @@ public class BDAButton {
 					notLogged = true;
 				} else {
 					login.logout();
-					changeImage();
-					changeState();
 					notLogged = false;
 				}
 			}
@@ -74,7 +72,7 @@ public class BDAButton {
 		this.iconName = iconName;
 		button = new JButton(getIconButton(iconName));
 		button.setPreferredSize(new Dimension((int) (buttonWidth * 0.5), (int) (buttonHeight * 0.5)));
-		addOperations(i);
+		addSortOperations(i);
 	}
 
 	/**
@@ -139,6 +137,7 @@ public class BDAButton {
 
 	/**
 	 * Método que devolve o nome de um botão
+	 * 
 	 * @return String (iconName)
 	 */
 	public String getIconName() {
@@ -148,7 +147,7 @@ public class BDAButton {
 	/**
 	 * Método que ordena cronologicamente a informação da inbox
 	 */
-	public void addOperations(GUI i) {
+	public void addSortOperations(GUI i) {
 		button.addActionListener(new ActionListener() {
 
 			@Override

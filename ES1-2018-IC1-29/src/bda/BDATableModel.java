@@ -19,6 +19,8 @@ public class BDATableModel extends AbstractTableModel {
 	private ArrayList<Content> content;
 	private String[] columnNames = new String[] { "Data e Hora", "Fonte", "Remetente", "Assunto" };
 	private ArrayList<Object> contentHandlers = new ArrayList<>();
+	
+	
 	/**
 	 * Construtor que recebe uma lista de conteúdos para apresentar
 	 * 

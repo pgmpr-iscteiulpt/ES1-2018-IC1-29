@@ -11,10 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.mail.MessagingException;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -23,8 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
-
-import com.restfb.types.Post;
 
 /**
  * Implementa uma JPanel que está associada a uma interface e um botão
@@ -178,7 +173,7 @@ public class Login extends JDialog {
 	// Login nos canais
 	/**
 	 * Método que permite averiguar se o email e password dados pelo utilizador são
-	 * válidos para efetuar o Login 
+	 * válidos para efetuar o Login
 	 */
 	public void login() {
 
@@ -200,10 +195,10 @@ public class Login extends JDialog {
 			FetchTweets twitter = new FetchTweets();
 			twitter.checkTweets();
 			content = twitter.getStatus();
-			i.getLog(2).setText("@Grupo29");
+			i.getLog(2).setText(twitter.getUserName());
 			contentHandler = twitter;
 		}
-		
+
 		if (type.equals("Facebook")) {
 			FetchPosts facebook = new FetchPosts();
 			facebook.checkPosts();
@@ -226,25 +221,26 @@ public class Login extends JDialog {
 				((AbstractTableModel) i.getInboxTable().getModel()).fireTableDataChanged();
 			}
 		}
-		
+
 		ArrayList<Object> handlers = ((BDATableModel) i.getInboxTable().getModel()).getContentHandlers();
-		
-		
 		if (!handlers.contains(contentHandler))
 			((BDATableModel) i.getInboxTable().getModel()).addContentHandler(contentHandler);
 	}
-	
+
 	/**
 	 * Método que permite o utilizador fazer Loggout
 	 */
 	public void logout() {
 		ArrayList<Content> remove = new ArrayList<Content>();
 
-		if (type.equals("Email"))
-			i.getLog(3).setText("Not Logged In   ");
-
 		if (type.equals("Twitter"))
 			i.getLog(2).setText("Not Logged In   ");
+
+		if (type.equals("Facebook"))
+			i.getLog(1).setText("Not Logged In   ");
+
+		if (type.equals("Email"))
+			i.getLog(3).setText("Not Logged In   ");
 
 		for (Content c : ((BDATableModel) i.getInboxTable().getModel()).getTableContent()) {
 			if (c.getType().equals(type))
@@ -257,7 +253,9 @@ public class Login extends JDialog {
 		remove.clear();
 		((AbstractTableModel) i.getInboxTable().getModel()).fireTableDataChanged();
 
+		b.changeImage();
+		b.changeState();
+
 	}
 
 }
-

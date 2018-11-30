@@ -25,15 +25,16 @@ public class Content {
 	private Status status;
 	private Post post;
 	private String type;
-	private String fbUserName;
+	private String username;
 
 	/**
 	 * Construtor de um Conteúdo da inbox
 	 * 
-	 * @param msg Message que representa o conteúdo dum Email
+	 * @param msg Message que representa o conteúdo de um Email
 	 */
-	public Content(Message msg) {
+	public Content(Message msg, String username) {
 		this.msg = msg;
+		this.username = username;
 		this.status = null;
 		this.post = null;
 		type = "Email";
@@ -44,16 +45,17 @@ public class Content {
 	 * 
 	 * @param status Status que representa o conteúdo dum Tweet
 	 */
-	public Content(Status status) {
+	public Content(Status status, String username) {
 		this.status = status;
+		this.username = username;
 		this.msg = null;
 		this.post = null;
 		type = "Twitter";
 	}
 
-	public Content(Post post, String fbUserName) {
+	public Content(Post post, String username) {
 		this.post = post;
-		this.fbUserName = fbUserName;
+		this.username = username;
 		this.msg = null;
 		this.status = null;
 		type = "Facebook";
@@ -73,7 +75,7 @@ public class Content {
 			return status;
 		if (type.equals("Facebook"))
 			return post;
-		
+
 		return null;
 	}
 
@@ -104,11 +106,10 @@ public class Content {
 
 		if (type.equals("Twitter"))
 			date = ((Status) this.getContent()).getCreatedAt().toString().split(" ");
-		
-		if (type.equals("Facebook")) 
+
+		if (type.equals("Facebook"))
 			date = ((Post) this.getContent()).getCreatedTime().toString().split(" ");
-			
-		
+
 		time = date[3].split(":");
 		hash = date[0] + date[1] + date[2] + date[5] + time[0] + time[1] + time[2];
 
@@ -129,10 +130,9 @@ public class Content {
 
 		if (type.equals("Twitter"))
 			date = ((Status) this.getContent()).getCreatedAt().toString();
-		
+
 		if (type.equals("Facebook"))
 			date = ((Post) this.getContent()).getCreatedTime().toString();
-
 
 		return date;
 
@@ -153,12 +153,11 @@ public class Content {
 		}
 		if (type.equals("Twitter")) {
 			return ((Status) this.getContent()).getUser().getName();
-		} 
-		if (type.equals("Facebook")) {
-			return fbUserName;
 		}
-		return null; 
-			
+		if (type.equals("Facebook")) {
+			return username;
+		}
+		return null;
 
 	}
 
@@ -173,14 +172,18 @@ public class Content {
 
 		if (type.equals("Email"))
 			return ((Message) this.getContent()).getSubject().toString();
-		
+
 		if (type.equals("Twitter"))
 			return ((Status) this.getContent()).getText();
 
 		if (type.equals("Facebook"))
 			return ((Post) this.getContent()).getMessage();
-		
+
 		return null;
 
+	}
+	
+	public String getUsername() {
+		return username;
 	}
 }
