@@ -22,7 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 /**
- * Cria uma JFrame representativa da interface referente apenas ao conteúdo selecionado
+ * Cria uma JFrame representativa da interface referente apenas ao conteúdo
+ * selecionado
  * 
  * @author Grupo 29
  * @version 2.0
@@ -45,11 +46,13 @@ public class ContentGUI {
 	private JLabel sender;
 	private JTextArea text;
 	private JButton send;
-	
+
 	private long id;
+	private ArrayList<Object> handlers = new ArrayList<>();
 
 	/**
 	 * Construtor de uma interface referente ao conteúdo
+	 * 
 	 * @param s Status que representa o conteúdo
 	 * @throws MessagingException
 	 */
@@ -57,6 +60,7 @@ public class ContentGUI {
 		frame = new JFrame(content.getType());
 		this.i = i;
 		this.content = content;
+		handlers = ((BDATableModel) i.getInboxTable().getModel()).getContentHandlers();
 		frame.setSize(width, height);
 		frame.setLocation(widthLocation, heightLocation);
 		frame.setLayout(new BorderLayout());
@@ -83,8 +87,20 @@ public class ContentGUI {
 
 		reply = new JButton("Reply", icon);
 		reply.setPreferredSize(new Dimension(50, 50));
-		center.add(reply, BorderLayout.SOUTH);
-		addOperations(from.toString()); 
+
+		if (content.getType().equals("Twitter")) {
+			JPanel buttons = new JPanel();
+			JButton retweet = new JButton("Retweet");
+			reply.setPreferredSize(new Dimension((int) (width * 0.2), (int) (height * 0.05)));
+			retweet.setPreferredSize(new Dimension((int) (width * 0.2), (int) (height * 0.05)));
+			addRetweetOperation(retweet);
+			buttons.add(reply);
+			buttons.add(retweet);
+			center.add(buttons, BorderLayout.SOUTH);
+		} else {
+			center.add(reply, BorderLayout.SOUTH);
+		}
+		addOperations(from.toString());
 
 		JTextArea t = new JTextArea();
 		t.setEditable(false);
@@ -99,10 +115,11 @@ public class ContentGUI {
 				hash = "Resources\\Tweets\\Tweet" + hash;
 			if (content.getType().equals("Facebook"))
 				hash = "Resources\\Posts\\Post" + hash;
-			
+
 			Scanner scanner = new Scanner(
 					new FileReader(new File(System.getProperty("user.dir") + File.separator + hash)));
-			id = Long.valueOf(scanner.nextLine());
+			if (content.getType().equals("Twitter"))
+				id = Long.valueOf(scanner.nextLine());
 			String s;
 			t.append("\n");
 			t.append("\n" + "ASSUNTO:   " + content.getSubject().toString() + "\n" + "\n");
@@ -118,13 +135,31 @@ public class ContentGUI {
 
 		frame.add(north, BorderLayout.NORTH);
 		frame.add(center, BorderLayout.CENTER);
-		frame.add(south, BorderLayout.SOUTH); 
+		frame.add(south, BorderLayout.SOUTH);
 		frame.setVisible(true);
 	}
 
+	private void addRetweetOperation(JButton retweet) {
+		retweet.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FetchTweets twitter = null;
+				for (Object cH : handlers) {
+					if (cH instanceof FetchTweets)
+						twitter = (FetchTweets) cH;
+				}
+
+				twitter.retweet(id);
+
+			}
+		});
+
+	}
+
 	/**
-	 * Método que possibilita a resposta por parte 
-	 * do utilizador para o remetente do conteúdo
+	 * Método que possibilita a resposta por parte do utilizador para o remetente do
+	 * conteúdo
 	 */
 	public void addOperations(String from) {
 		reply.addActionListener(new ActionListener() {
@@ -143,29 +178,27 @@ public class ContentGUI {
 				send = new JButton("Send", icon);
 				send.setPreferredSize(new Dimension(200, 50));
 				send.addActionListener(new ActionListener() {
-					
+
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						ArrayList<Object> f = ((BDATableModel) i.getInboxTable().getModel()).getContentHandlers();
-						
 						if (content.getType().equals("Email")) {
 							FetchEmails email = null;
-							for (Object cH: f) {
+							for (Object cH : handlers) {
 								if (cH instanceof FetchEmails)
 									email = (FetchEmails) cH;
 							}
-							
+
 							email.sendEmail(from, "es1.grupo29@gmail.com", "Subject", text.getText());
-						}else {
+						} else {
 							if (content.getType().equals("Twitter")) {
 								FetchTweets twitter = null;
-								for (Object cH: f) {
+								for (Object cH : handlers) {
 									if (cH instanceof FetchTweets)
 										twitter = (FetchTweets) cH;
 								}
-								
+
 								twitter.replyTweet(id, text.getText());
-								
+
 							}
 						}
 					}

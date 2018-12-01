@@ -16,6 +16,7 @@ public class FetchPosts {
 
 	private User user;
 	private String userName;
+	FacebookClient a;
 	private Connection<Post> result;
 	private ArrayList<Content> posts = new ArrayList<>();
 
@@ -23,9 +24,11 @@ public class FetchPosts {
 		String accessToken = "EAALFIGPljFgBAGzUGaoJ5bux0MdV831tF9yeExTeWU7ap3xAMWMQnT6J3y8FhZCVXKL3CmXsN8K0TWXXRcWVdXgc0ddZAqdSejiZCwSYqoHoSS7LRcIcFfnR4ltYJQkgpvu4XP57GsflRGZBf5lxPctGQxzzIAhkytSZB6J0OxGZC9mgmHuYTv";
 		@SuppressWarnings("deprecation")
 		FacebookClient fbClient = new DefaultFacebookClient(accessToken);
+		a = fbClient;
 		user = fbClient.fetchObject("me", User.class);
-		
+
 		result = fbClient.fetchConnection("me/feed", Post.class);
+
 	}
 
 	public void checkPosts() {
@@ -38,7 +41,6 @@ public class FetchPosts {
 					posts.add(p);
 					String hash;
 					hash = p.getHashCode();
-
 					PrintWriter writer = new PrintWriter(
 							System.getProperty("user.dir") + File.separator + "Resources\\Posts\\Post" + hash, "UTF-8");
 					writer.println(aPost.getMessage());
@@ -49,14 +51,20 @@ public class FetchPosts {
 
 			}
 		}
-	}
 
+	}
 
 	public ArrayList<Content> getPosts() {
 		return posts;
 	}
-	
+
 	public String getUserName() {
 		return userName;
 	}
 }
+
+//static AccessToken accessToken = new DefaultFacebookClient().obtainExtendedAccessToken("<my app id>", "<my app secret>");
+//   public LoggedInFacebookClient(String appId, String appSecret) {
+//AccessToken accessToken = this.obtainAppAccessToken(appId, appSecret);
+//this.accessToken = accessToken.getAccessToken();
+//}
