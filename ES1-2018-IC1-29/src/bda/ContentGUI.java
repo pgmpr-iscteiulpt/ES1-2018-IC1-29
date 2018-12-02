@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import javax.mail.MessagingException;
 import javax.swing.ImageIcon;
@@ -20,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.xml.ws.soap.AddressingFeature;
 
 /**
  * Cria uma JFrame representativa da interface referente apenas ao conteúdo
@@ -47,7 +49,7 @@ public class ContentGUI {
 	private JTextArea text;
 	private JButton send;
 
-	private long id;
+	private Object id;
 	private ArrayList<Object> handlers = new ArrayList<>();
 
 	/**
@@ -85,22 +87,30 @@ public class ContentGUI {
 		Image image = icon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
 		icon = new ImageIcon(image);
 
-		reply = new JButton("Reply", icon);
-		reply.setPreferredSize(new Dimension(50, 50));
+		if (content.getType().equals("Facebook")) {
+			JButton getLikesComments = new JButton("Likes and Comments");
+			getLikesComments.setPreferredSize(new Dimension(50, 50));
+			center.add(getLikesComments, BorderLayout.SOUTH);
+			addFacebookOperations(getLikesComments);
 
-		if (content.getType().equals("Twitter")) {
-			JPanel buttons = new JPanel();
-			JButton retweet = new JButton("Retweet");
-			reply.setPreferredSize(new Dimension((int) (width * 0.2), (int) (height * 0.05)));
-			retweet.setPreferredSize(new Dimension((int) (width * 0.2), (int) (height * 0.05)));
-			addRetweetOperation(retweet);
-			buttons.add(reply);
-			buttons.add(retweet);
-			center.add(buttons, BorderLayout.SOUTH);
 		} else {
-			center.add(reply, BorderLayout.SOUTH);
+			reply = new JButton("Reply", icon);
+			reply.setPreferredSize(new Dimension(50, 50));
+
+			if (content.getType().equals("Twitter")) {
+				JPanel buttons = new JPanel();
+				JButton retweet = new JButton("Retweet");
+				reply.setPreferredSize(new Dimension((int) (width * 0.2), (int) (height * 0.05)));
+				retweet.setPreferredSize(new Dimension((int) (width * 0.2), (int) (height * 0.05)));
+				addRetweetOperation(retweet);
+				buttons.add(reply);
+				buttons.add(retweet);
+				center.add(buttons, BorderLayout.SOUTH);
+			} else {
+				center.add(reply, BorderLayout.SOUTH);
+			}
+			addReplyOperations(from.toString());
 		}
-		addOperations(from.toString());
 
 		JTextArea t = new JTextArea();
 		t.setEditable(false);
@@ -120,6 +130,8 @@ public class ContentGUI {
 					new FileReader(new File(System.getProperty("user.dir") + File.separator + hash)));
 			if (content.getType().equals("Twitter"))
 				id = Long.valueOf(scanner.nextLine());
+			if (content.getType().equals("Facebook"))
+				id = scanner.nextLine();
 			String s;
 			t.append("\n");
 			t.append("\n" + "ASSUNTO:   " + content.getSubject().toString() + "\n" + "\n");
@@ -150,7 +162,43 @@ public class ContentGUI {
 						twitter = (FetchTweets) cH;
 				}
 
-				twitter.retweet(id);
+				twitter.retweet((long) id);
+
+			}
+		});
+
+	}
+
+	private void addFacebookOperations(JButton getLikesComments) {
+		getLikesComments.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				south.setPreferredSize(new Dimension(200, 200));
+
+				text = new JTextArea();
+				text.setPreferredSize(new Dimension(300, 300));
+				south.add(text, BorderLayout.CENTER);
+
+				long likesCount = 0;
+				long commentsCount = 0;
+				HashMap<String, String> comments = new HashMap<>();
+				FetchPosts facebook = null;
+				for (Object cH : handlers) {
+					if (cH instanceof FetchPosts)
+						facebook = (FetchPosts) cH;
+				}
+
+				likesCount = facebook.getLikesCount((String) id);
+				commentsCount = facebook.getCommentsCount((String) id);
+				comments = facebook.getComments((String) id);
+				text.setText("Número de likes:  " + likesCount + "\n" + "\n");
+				text.append("Comentários: " + commentsCount + "\n");
+				for (HashMap.Entry<String, String> entry : comments.entrySet()) {
+					text.append("De:  " + entry.getValue() + "\n");
+					text.append(entry.getKey() + "\n" + "\n");
+				}
 
 			}
 		});
@@ -161,7 +209,7 @@ public class ContentGUI {
 	 * Método que possibilita a resposta por parte do utilizador para o remetente do
 	 * conteúdo
 	 */
-	public void addOperations(String from) {
+	private void addReplyOperations(String from) {
 		reply.addActionListener(new ActionListener() {
 
 			@Override
@@ -197,7 +245,7 @@ public class ContentGUI {
 										twitter = (FetchTweets) cH;
 								}
 
-								twitter.replyTweet(id, text.getText());
+								twitter.replyTweet((long) id, text.getText());
 
 							}
 						}
