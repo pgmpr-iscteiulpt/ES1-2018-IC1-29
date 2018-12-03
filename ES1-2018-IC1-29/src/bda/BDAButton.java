@@ -1,14 +1,27 @@
 package bda;
 
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.mail.MessagingException;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -31,7 +44,7 @@ public class BDAButton {
 	private String iconName;
 	private Login login;
 	private boolean order;
-	private boolean notLogged = false;
+	private boolean logged = false;
 
 	/**
 	 * Construtor de um botão que possui uma interface e uma imagem
@@ -45,19 +58,8 @@ public class BDAButton {
 		button = new JButton(getIconButton(iconName + "Off"));
 
 		button.setPreferredSize(new Dimension(buttonWidth, buttonHeight));
-		button.addActionListener(new ActionListener() {
+		addLogOperations();
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!notLogged) {
-					login.open();
-					notLogged = true;
-				} else {
-					login.logout();
-					notLogged = false;
-				}
-			}
-		});
 	}
 
 	/**
@@ -147,7 +149,59 @@ public class BDAButton {
 	/**
 	 * Método que ordena cronologicamente a informação da inbox
 	 */
-	public void addSortOperations(GUI i) {
+
+	private void addLogOperations() {
+
+		button.addMouseListener(new MouseAdapter() {
+
+			public void mouseClicked(MouseEvent evnt) {
+
+				if (SwingUtilities.isLeftMouseButton(evnt)) {
+					if (!logged) {
+						login.open();
+						logged = true;
+					} else {
+						login.logout();
+						logged = false;
+					}
+				}
+				if (SwingUtilities.isRightMouseButton(evnt)) {
+					UIManager.put("OptionPane.minimumSize", new Dimension(450, 130));
+					String[] possibleValues = { "Terminar sessão", "Cancelar" };
+
+					int value = JOptionPane.showOptionDialog(null,
+							"Tem a certeza que pretende terminar sessão no " + iconName + "?", "Terminar sessão",
+							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, getIconButton(iconName + "On"),
+							possibleValues, possibleValues[1]);
+					if (value == JOptionPane.YES_OPTION) {
+						File dir = null;
+						switch (iconName) {
+						case "Email":
+							dir = new File("Resources/Emails");
+							break;
+						case "Twitter":
+							dir = new File("Resources/Emails");
+							break;
+						case "Facebook":
+							dir = new File("Resources/Posts");
+							break;
+						}
+
+						for (File file : dir.listFiles())
+							if (!file.getName().equals("Untitled"))
+								file.delete();
+						login.logout();
+						logged = false;
+					}
+				}
+			}
+		});
+
+//			
+
+	}
+
+	private void addSortOperations(GUI i) {
 		button.addActionListener(new ActionListener() {
 
 			@Override

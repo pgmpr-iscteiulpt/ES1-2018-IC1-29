@@ -1,6 +1,7 @@
 package bda;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -29,7 +30,6 @@ public class FetchEmails {
 	private Store store;
 	private Folder inbox;
 
-
 	/**
 	 * Método que devolve um arraylist de Conteúdos
 	 * 
@@ -57,7 +57,7 @@ public class FetchEmails {
 	 */
 	public void checkMail(String userName, String password) {
 		setProperties();
-		
+
 		this.userName = userName;
 
 		try {
@@ -120,7 +120,7 @@ public class FetchEmails {
 		}
 
 	}
-	
+
 	public String getUserName() {
 		return userName;
 	}
