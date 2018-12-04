@@ -26,13 +26,17 @@ public class FetchTweets {
 	private ConfigurationBuilder conf;
 	private TwitterFactory factory;
 	private Twitter twitter;
+	private String token1;
+	private String token2;
+	private String token3;
+	private String token4;
 
 	private void setProperties() {
 		conf = new ConfigurationBuilder();
-		conf.setDebugEnabled(true).setOAuthConsumerKey("AWYJQX6EFgYwtAj0mvND4mAB4")
-				.setOAuthConsumerSecret("6mTebovEjo5NB5DCkoXNgv6ftylM4vLgcI1POtED5JlMH3H1s8")
-				.setOAuthAccessToken("1064175567191330817-iJzBvZrNu4nVTccmXDK4wZDbuzaKx3")
-				.setOAuthAccessTokenSecret("mGdzd4dgGZgP2atSUfjBXaKigI0N1PCTQPD1faurpR4HH");
+		conf.setDebugEnabled(true).setOAuthConsumerKey(token1)
+				.setOAuthConsumerSecret(token2)
+				.setOAuthAccessToken(token3)
+				.setOAuthAccessTokenSecret(token4);
 
 		factory = new TwitterFactory(conf.build());
 		twitter = factory.getInstance();
@@ -47,7 +51,11 @@ public class FetchTweets {
 	 * @throws TwitterException
 	 * @throws IllegalStateException
 	 */
-	public void checkTweets() {
+	public void checkTweets(String token1, String token2, String token3, String token4) {
+		this.token1 = token1;
+		this.token2 = token2;
+		this.token3 = token3;
+		this.token4 = token4;
 		setProperties();
 		try {
 			userName = twitter.showUser(twitter.getScreenName()).getName();
@@ -60,6 +68,11 @@ public class FetchTweets {
 				PrintWriter writer = new PrintWriter(
 						System.getProperty("user.dir") + File.separator + "Resources\\Tweets\\Tweet" + hash, "UTF-8");
 				writer.println(s.getId());
+				writer.println("Twitter");
+				writer.println(userName);
+				writer.println(s.getCreatedAt().toString());
+				writer.println(userName);
+				writer.println(((Status) c.getContent()).getText());
 				writer.println(((Status) c.getContent()).getText());
 				writer.close();
 			}

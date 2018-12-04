@@ -24,16 +24,17 @@ public class FetchPosts {
 	private FacebookClient fbClient;
 	private Connection<Post> result;
 	private ArrayList<Content> posts = new ArrayList<>();
+	private String accessToken;
 
 	@SuppressWarnings("deprecation")
 	private void setProperties() {
-		String accessToken = "EAAD4Yt8YSVgBAJE0EEG5Aj4ktyavf4QcG2ZAnRq8tv6O6jAO5jfuqCXw5tCHyyZCItR6iJ4Fq74CYJr4yNjd9ZBS8oREAhyLmp6ClzUag7JleMZCUSPJojaPFMEPfYMQx175BNqUsEmCR745dghiFl41o2BpV46sgUill5AojVHf34lwzkqf";
 		fbClient = new DefaultFacebookClient(accessToken);
 		user = fbClient.fetchObject("me", User.class);
 		result = fbClient.fetchConnection("me/feed", Post.class);
 	}
 
-	public void checkPosts() {
+	public void checkPosts(String token) {
+		this.accessToken = token;
 		setProperties();
 		userName = user.getName().toString();
 		for (List<Post> page : result) {
@@ -46,6 +47,11 @@ public class FetchPosts {
 					PrintWriter writer = new PrintWriter(
 							System.getProperty("user.dir") + File.separator + "Resources\\Posts\\Post" + hash, "UTF-8");
 					writer.println(aPost.getId());
+					writer.println("Facebook");
+					writer.println(userName);
+					writer.println(aPost.getCreatedTime());
+					writer.println(userName);
+					writer.println(aPost.getMessage());
 					writer.println(aPost.getMessage());
 					writer.close();
 				} catch (MessagingException | IOException e) {
@@ -81,7 +87,7 @@ public class FetchPosts {
 	public HashMap<String, String> getComments(String postID) {
 		HashMap<String, String> comments = new HashMap<>();
 		Connection<Comment> allComments = fbClient.fetchConnection(postID + "/comments", Comment.class);
-		for (List<Comment> postcomments : allComments) {			
+		for (List<Comment> postcomments : allComments) {
 			for (Comment comment : postcomments) {
 				comments.put(comment.getMessage().toString(), comment.getFrom().getName());
 			}
@@ -89,9 +95,3 @@ public class FetchPosts {
 		return comments;
 	}
 }
-
-//static AccessToken accessToken = new DefaultFacebookClient().obtainExtendedAccessToken("<my app id>", "<my app secret>");
-//   public LoggedInFacebookClient(String appId, String appSecret) {
-//AccessToken accessToken = this.obtainAppAccessToken(appId, appSecret);
-//this.accessToken = accessToken.getAccessToken();
-//}

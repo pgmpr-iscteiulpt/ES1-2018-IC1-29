@@ -1,6 +1,11 @@
 package bda;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.Scanner;
 
 import javax.mail.Address;
 import javax.mail.Message;
@@ -19,13 +24,19 @@ import twitter4j.Status;
  * @version 2.0
  */
 
-public class Content {
+public class Content implements Serializable {
 
 	private Message msg;
 	private Status status;
 	private Post post;
 	private String type;
 	private String username;
+
+	private Scanner s = null;
+	private String scannedDate;
+	private String scannedFrom;
+	private String scannedSubject;
+	private Boolean scanned = false;
 
 	/**
 	 * Construtor de um Conteúdo da inbox
@@ -59,6 +70,26 @@ public class Content {
 		this.msg = null;
 		this.status = null;
 		type = "Facebook";
+	}
+
+	public Content(File path) {
+		this.post = null;
+		this.msg = null;
+		this.status = null;
+		try {
+			s = new Scanner(new FileReader(path));
+			s.nextLine();
+			type = s.nextLine();
+			username = s.nextLine();
+			scannedDate = s.nextLine();
+			scannedFrom = s.nextLine();
+			scannedSubject = s.nextLine();
+			scanned = true;
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	/**
@@ -101,15 +132,19 @@ public class Content {
 		String[] date = null;
 		String[] time = null;
 
-		if (type.equals("Email"))
-			date = ((Message) this.getContent()).getSentDate().toString().split(" ");
+		if (scanned) {
+			date = scannedDate.split(" ");
+		} else {
 
-		if (type.equals("Twitter"))
-			date = ((Status) this.getContent()).getCreatedAt().toString().split(" ");
+			if (type.equals("Email"))
+				date = ((Message) this.getContent()).getSentDate().toString().split(" ");
 
-		if (type.equals("Facebook"))
-			date = ((Post) this.getContent()).getCreatedTime().toString().split(" ");
+			if (type.equals("Twitter"))
+				date = ((Status) this.getContent()).getCreatedAt().toString().split(" ");
 
+			if (type.equals("Facebook"))
+				date = ((Post) this.getContent()).getCreatedTime().toString().split(" ");
+		}
 		time = date[3].split(":");
 		hash = date[0] + date[1] + date[2] + date[5] + time[0] + time[1] + time[2];
 
@@ -125,15 +160,19 @@ public class Content {
 	 */
 	public String getDate() throws MessagingException, IOException {
 		String date = null;
-		if (type.equals("Email"))
-			date = ((Message) this.getContent()).getSentDate().toString();
 
-		if (type.equals("Twitter"))
-			date = ((Status) this.getContent()).getCreatedAt().toString();
+		if (scanned)
+			date = scannedDate;
+		else {
+			if (type.equals("Email"))
+				date = ((Message) this.getContent()).getSentDate().toString();
 
-		if (type.equals("Facebook"))
-			date = ((Post) this.getContent()).getCreatedTime().toString();
+			if (type.equals("Twitter"))
+				date = ((Status) this.getContent()).getCreatedAt().toString();
 
+			if (type.equals("Facebook"))
+				date = ((Post) this.getContent()).getCreatedTime().toString();
+		}
 		return date;
 
 	}
@@ -146,7 +185,8 @@ public class Content {
 	 * @throws IOException
 	 */
 	public String getFrom() throws MessagingException, IOException {
-
+		if (scanned)
+			return scannedFrom;
 		if (type.equals("Email")) {
 			Address[] a = ((Message) this.getContent()).getFrom();
 			return ((InternetAddress) a[0]).getAddress();
@@ -169,6 +209,8 @@ public class Content {
 	 * @throws IOException
 	 */
 	public String getSubject() throws MessagingException, IOException {
+		if (scanned)
+			return scannedSubject;
 
 		if (type.equals("Email"))
 			return ((Message) this.getContent()).getSubject().toString();
@@ -182,8 +224,9 @@ public class Content {
 		return null;
 
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
+
 }

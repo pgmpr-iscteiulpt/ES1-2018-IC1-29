@@ -14,6 +14,16 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 /**
  * Acede à caixa de entrada de uma conta de email tendo em conta que o username
  * e password corretos são fornecidos
@@ -80,7 +90,13 @@ public class FetchEmails {
 				String hash = c.getHashCode();
 				PrintWriter writer = new PrintWriter(
 						System.getProperty("user.dir") + File.separator + "Resources\\Emails\\Email" + hash, "UTF-8");
-				Message b = (Message) c.getContent();
+				Message b = (Message) c.getContent();		 
+				writer.println("no ID");
+				writer.println("Email");
+				writer.println(userName);
+				writer.println(b.getSentDate());
+				writer.println(((InternetAddress) b.getFrom()[0]).getAddress());
+				writer.println(b.getSubject());
 				writer.println(b.getContent());
 				writer.close();
 			}
@@ -120,6 +136,7 @@ public class FetchEmails {
 		}
 
 	}
+
 
 	public String getUserName() {
 		return userName;

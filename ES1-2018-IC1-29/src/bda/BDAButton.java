@@ -24,6 +24,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 /**
  * Implementa um botão a que será atribuído uma interface, imagem e
  * funcionalidade
@@ -167,12 +172,12 @@ public class BDAButton {
 				}
 				if (SwingUtilities.isRightMouseButton(evnt)) {
 					UIManager.put("OptionPane.minimumSize", new Dimension(450, 130));
-					String[] possibleValues = { "Terminar sessão", "Cancelar" };
+					String[] possibleValues = { "Terminar sessão", "Alterar dados de autenticação", "Cancelar" };
 
 					int value = JOptionPane.showOptionDialog(null,
 							"Tem a certeza que pretende terminar sessão no " + iconName + "?", "Terminar sessão",
-							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, getIconButton(iconName + "On"),
-							possibleValues, possibleValues[1]);
+							JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+							getIconButton(iconName + "On"), possibleValues, possibleValues[1]);
 					if (value == JOptionPane.YES_OPTION) {
 						File dir = null;
 						switch (iconName) {
@@ -191,13 +196,30 @@ public class BDAButton {
 							if (!file.getName().equals("Untitled"))
 								file.delete();
 						login.logout();
+						deleteFromXML(iconName, login.getUsername());
 						logged = false;
+					}
+					if (value == JOptionPane.NO_OPTION) {
+						UIManager.put("OptionPane.minimumSize", new Dimension(450, 130));
+						String[] values;
+						if (iconName.equals("Email")) {
+							String[] aux = { "Username", "Password", "Token" };
+							values = aux;
+						} else {
+							String[] aux = { "Username", "Password", "Token" };
+							values = aux;
+						}
+						String selectedValue = (String) JOptionPane.showInputDialog(null,
+								"Escolha o atributo que pretende alterar.", "Alterar Dados",
+								JOptionPane.OK_CANCEL_OPTION, getIconButton(iconName + "On"), values, values[0]);
+
+						String input = JOptionPane.showInputDialog("Insira o novo valor para o " + selectedValue);
+						updateXML(iconName, login.getUsername(), selectedValue.toLowerCase(), input);
 					}
 				}
 			}
-		});
 
-//			
+		});
 
 	}
 
@@ -216,6 +238,41 @@ public class BDAButton {
 
 			}
 		});
+	}
+
+	private void deleteFromXML(String root, String user) {
+		Document doc = login.getXMLDoc();
+
+		NodeList nodes = doc.getElementsByTagName(root + "User");
+		for (int i = 0; i < nodes.getLength(); i++) {
+			Element user1 = (Element) nodes.item(i);
+			String username = (String) user1.getElementsByTagName("username").item(0).getTextContent();
+			if (username.equals(user)) {
+				user1.getParentNode().removeChild(user1);
+			}
+
+		}
+
+		login.writeXML(doc);
+		JOptionPane.showMessageDialog(null,
+				"Todos os dados e ficheiros associados à sua conta de " + root + " foram removidos do sistema.",
+				"Sessão terminada", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	private void updateXML(String root, String user, String type, String input) {
+		Document doc = login.getXMLDoc();
+
+		NodeList listOfUsers = doc.getElementsByTagName(root + "User");
+		for (int i = 0; i < listOfUsers.getLength(); i++) {
+			Node search = doc.getElementsByTagName("username").item(i);
+			if (search.getTextContent().equals(user)) {
+				Node change = doc.getElementsByTagName(type).item(i);
+				change.setTextContent(input);
+			}
+		}
+
+		login.writeXML(doc);
+
 	}
 
 }
