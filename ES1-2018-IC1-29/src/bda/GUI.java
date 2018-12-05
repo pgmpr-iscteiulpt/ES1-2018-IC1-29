@@ -3,6 +3,8 @@ package bda;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -43,6 +45,9 @@ public class GUI {
 	private BDAButton recent = new BDAButton(this, "recent", true);
 	private BDAButton old = new BDAButton(this, "old", false);
 	private JTable inboxTable;
+	boolean bFrom;
+	boolean bType;
+	boolean bSubjetc;
 
 	// TextFields
 	private JTextField log1 = new JTextField("Not Logged In   ");
@@ -122,6 +127,38 @@ public class GUI {
 		buttonsPanel.add(social, BorderLayout.WEST);
 		social.setBorder(BorderFactory.createEmptyBorder(0, (int) (width * 0.048), 0, 0));
 
+		// filter
+		JPanel filterPanel = new JPanel();
+		JTextField filter = new JTextField("Filtro...  ");
+		filter.setFont(new Font("SansSerif", Font.ITALIC, 16));
+		filter.setForeground(Color.gray);
+		filter.setHorizontalAlignment(JTextField.RIGHT);
+		filterPanel.add(filter);
+		filter.setBorder(BorderFactory.createLineBorder(Color.gray));
+		filter.setEditable(false);
+		buttonsPanel.add(filterPanel, BorderLayout.CENTER);
+		filter.setPreferredSize(new Dimension(400, 30));
+		filterPanel.setBorder(BorderFactory.createEmptyBorder((int) (width * 0.03), (int) (width * 0.35), 0, 0));
+		filter.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent evnt) {
+				if (filter.getText().equals("Filtro...  ")) {
+					filter.setText("");
+					filter.setEditable(true);
+				}
+			}
+		});
+		filter.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					getFilteredContent(filter.getText());
+					filter.setText(("Filtro...  "));
+					filter.setEditable(false);
+				}
+
+			}
+
+		});
+
 		// order buttons
 		JPanel chronology = new JPanel();
 		chronology.add(recent.getButton());
@@ -131,7 +168,7 @@ public class GUI {
 
 		// Build table
 		inboxTable = new JTable();
-		addTableListener(inboxTable, this);
+		addTableListener(this);
 		JScrollPane scrollInbox = new JScrollPane(inboxTable);
 		scrollInbox.setViewportView(inboxTable);
 		scrollInbox.setPreferredSize(inboxSize);
@@ -147,18 +184,91 @@ public class GUI {
 	 * 
 	 * @param t JTable
 	 */
-	private void addTableListener(JTable t, GUI i) {
-		t.addMouseListener(new MouseAdapter() {
+	private void addTableListener(GUI i) {
+		inboxTable.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evnt) {
-				BDATableModel model = (BDATableModel) t.getModel();
+				BDATableModel model = (BDATableModel) inboxTable.getModel();
 				try {
-					new ContentGUI((Content) model.getMessageAt(t.getSelectedRow()), i);
+					new ContentGUI((Content) model.getMessageAt(inboxTable.getSelectedRow()), i);
 				} catch (HeadlessException | MessagingException | IOException e) {
 					e.printStackTrace();
 				}
 			}
 
 		});
+	}
+
+	private void getFilteredContent(String text) {
+
+		JFrame filterParameters = new JFrame("Parâmetros do Filtro");
+		filterParameters.setLocation(screenDim.width / 2 - (int) (width * 0.4) / 2,
+				screenDim.height / 2 - (int) (height * 0.3) / 2);
+		filterParameters.setSize(new Dimension((int) (width * 0.4), (int) (height * 0.3)));
+		filterParameters.setLayout(new BorderLayout());
+		filterParameters.setResizable(false);
+
+		JLabel label = new JLabel(" Escolha os parâmetros a que deseja aplicar o filtro \"" + text + "\":");
+		label.setFont(new Font("SansSerif", Font.PLAIN, 16));
+
+		JCheckBox from = new JCheckBox("Remetente");
+		from.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		JCheckBox type = new JCheckBox("Fonte");
+		type.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		JCheckBox subject = new JCheckBox("Assunto");
+		subject.setFont(new Font("SansSerif", Font.PLAIN, 16));
+
+		JPanel checkBoxes = new JPanel();
+		checkBoxes.setLayout(new GridLayout(3, 2));
+		checkBoxes.add(new JLabel(new ImageIcon(
+				new ImageIcon("images/user.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH))));
+		checkBoxes.add(from);
+		checkBoxes.add(new JLabel(new ImageIcon(
+				new ImageIcon("images/type.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH))));
+		checkBoxes.add(type);
+		checkBoxes.add(new JLabel(new ImageIcon(new ImageIcon("images/subject.png").getImage().getScaledInstance(50, 50,
+				java.awt.Image.SCALE_SMOOTH))));
+		checkBoxes.add(subject);
+
+		ItemListener il = new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+
+				Object selected = e.getItemSelectable();
+				if (selected == from)
+					bFrom = !bFrom;
+				if (selected == type)
+					bType = !bType;
+				if (selected == subject)
+					bSubjetc = !bSubjetc;
+			}
+		};
+
+		from.addItemListener(il);
+		type.addItemListener(il);
+		subject.addItemListener(il);
+
+		JButton confirm = new JButton("Confirmar");
+		confirm.setPreferredSize(new Dimension(10,25));
+		confirm.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				((BDATableModel) inboxTable.getModel()).filter(text, bFrom, bType, bSubjetc);
+				bFrom = false;
+				bType = false;
+				bSubjetc = false;
+				filterParameters.dispose();
+
+			}
+		});
+
+		filterParameters.add(label, BorderLayout.NORTH);
+		filterParameters.add(checkBoxes, BorderLayout.CENTER);
+		filterParameters.add(confirm, BorderLayout.SOUTH);
+
+		filterParameters.setVisible(true);
+
 	}
 
 	/**

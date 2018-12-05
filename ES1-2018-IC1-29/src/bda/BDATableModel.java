@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import javax.mail.MessagingException;
 import javax.swing.table.AbstractTableModel;
 
-
 /**
  * Implementa um modelo de JTable adaptado à listagem de emails, tweets e posts
  * 
@@ -17,10 +16,11 @@ import javax.swing.table.AbstractTableModel;
 public class BDATableModel extends AbstractTableModel {
 
 	private ArrayList<Content> content;
+	private ArrayList<Content> backupContent = new ArrayList<>();
+	private ArrayList<Content> filteredContent = new ArrayList<>();
 	private String[] columnNames = new String[] { "Data e Hora", "Fonte", "Remetente", "Assunto" };
 	private ArrayList<Object> contentHandlers = new ArrayList<>();
-	
-	
+
 	/**
 	 * Construtor que recebe uma lista de conteúdos para apresentar
 	 * 
@@ -75,6 +75,51 @@ public class BDATableModel extends AbstractTableModel {
 		return null;
 	}
 
+	public void filter(String text, boolean from, boolean type, boolean subject) {
+
+		if (backupContent.isEmpty())
+			backupContent.addAll(content);
+
+		filteredContent.clear();
+		content.clear();
+		// sem filtro
+		if (!from && !type && !subject) {
+			content.addAll(backupContent);
+			fireTableDataChanged();
+			return;
+			// com filtro
+		} else {
+			try {
+				for (Content c : backupContent) {
+					boolean add = false;
+					if (from) {
+						if (c.getFrom().toLowerCase().contains(text.toLowerCase()))
+							add = true;
+					}
+
+					if (type) {
+						if (c.getType().toLowerCase().contains(text.toLowerCase()))
+							add = true;
+					}
+					if (subject) {
+						if (c.getSubject().toLowerCase().contains(text.toLowerCase()))
+							add = true;
+					}
+
+					if (add)
+						filteredContent.add(c);
+
+				}
+			} catch (IOException | MessagingException e) {
+				e.printStackTrace();
+			}
+		}
+
+		content.addAll(filteredContent);
+		fireTableDataChanged();
+
+	}
+
 	/**
 	 * Método que devolve uma String com o nome da coluna
 	 * 
@@ -107,6 +152,7 @@ public class BDATableModel extends AbstractTableModel {
 
 	/**
 	 * Método que retorna um arraylist com o conteúdo da tabela
+	 * 
 	 * @return content ArrayList<Content>
 	 */
 	public ArrayList<Content> getTableContent() {
@@ -117,10 +163,9 @@ public class BDATableModel extends AbstractTableModel {
 		contentHandlers.add(cH);
 
 	}
-	
+
 	public ArrayList<Object> getContentHandlers() {
 		return contentHandlers;
 	}
-
 
 }
