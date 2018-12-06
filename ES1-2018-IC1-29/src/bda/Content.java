@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Scanner;
 
 import javax.mail.Address;
@@ -31,6 +32,7 @@ public class Content implements Serializable {
 	private Post post;
 	private String type;
 	private String username;
+	private String time;
 
 	private Scanner s = null;
 	private String scannedDate;
@@ -72,6 +74,15 @@ public class Content implements Serializable {
 		type = "Facebook";
 	}
 
+	public Content(Post post, String username, String time) {
+		this.post = post;
+		this.username = username;
+		this.time = time;
+		this.type = "Facebook Group";
+		this.msg = null;
+		this.status = null;
+	}
+
 	public Content(File path) {
 		this.post = null;
 		this.msg = null;
@@ -104,7 +115,7 @@ public class Content implements Serializable {
 			return msg;
 		if (type.equals("Twitter"))
 			return status;
-		if (type.equals("Facebook"))
+		if (type.equals("Facebook") || type.equals("Facebook Group"))
 			return post;
 
 		return null;
@@ -144,6 +155,9 @@ public class Content implements Serializable {
 
 			if (type.equals("Facebook"))
 				date = ((Post) this.getContent()).getCreatedTime().toString().split(" ");
+
+			if (type.equals("Facebook Group"))
+				date = this.time.toString().split(" ");
 		}
 		time = date[3].split(":");
 		hash = date[0] + date[1] + date[2] + date[5] + time[0] + time[1] + time[2];
@@ -172,6 +186,9 @@ public class Content implements Serializable {
 
 			if (type.equals("Facebook"))
 				date = ((Post) this.getContent()).getCreatedTime().toString();
+
+			if (type.equals("Facebook Group"))
+				date = this.time;
 		}
 		return date;
 
@@ -194,9 +211,10 @@ public class Content implements Serializable {
 		if (type.equals("Twitter")) {
 			return ((Status) this.getContent()).getUser().getName();
 		}
-		if (type.equals("Facebook")) {
+		if (type.equals("Facebook") || type.equals("Facebook Group")) {
 			return username;
 		}
+
 		return null;
 
 	}
@@ -218,7 +236,7 @@ public class Content implements Serializable {
 		if (type.equals("Twitter"))
 			return ((Status) this.getContent()).getText();
 
-		if (type.equals("Facebook"))
+		if (type.equals("Facebook") || type.equals("Facebook Group"))
 			return ((Post) this.getContent()).getMessage();
 
 		return null;

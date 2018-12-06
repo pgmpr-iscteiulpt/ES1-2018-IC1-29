@@ -1,9 +1,14 @@
 package bda;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.Date;
 
 import javax.mail.MessagingException;
+
 /**
  * Cria um enumerado que representa os meses em formato de data
  * 
@@ -11,7 +16,7 @@ import javax.mail.MessagingException;
  * @version 2.0
  */
 enum Months {
-	Jan(0), Feb(1), Mar(2), Apr(3), May(4), Jun(5), Jul(6), Aug(7), Sep(8), Oct(9), Nov(10), Dec(11);
+	Jan(1), Feb(2), Mar(3), Apr(4), May(5), Jun(6), Jul(7), Aug(8), Sep(9), Oct(10), Nov(11), Dec(12);
 
 	private final int a;
 
@@ -75,6 +80,26 @@ public class DateComparator implements Comparator<Content> {
 			}
 		}
 		return (Integer) null;
+	}
+
+	public boolean moreThanDay(String date) {
+		long dailyMillies = 24 * 60 * 60 * 1000L;
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String[] simpleDate = date.split(" ");
+		Date date1 = null;
+		Date date2 = null;
+		try {
+			date1 = sdf.parse(simpleDate[5] + "-" + Months.valueOf(simpleDate[1]).getA() + "-" + simpleDate[2]);
+			date2 = sdf.parse(LocalDate.now().toString());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		boolean moreThanDay = Math.abs(date1.getTime() - date2.getTime()) > dailyMillies;
+
+		return moreThanDay;
+
 	}
 
 }

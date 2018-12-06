@@ -57,17 +57,9 @@ public class FetchEmails {
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.port", "465");
 	}
-
-	/**
-	 * Método que confirma se o username e password fornecidos estão corretos e
-	 * acede à conta de email
-	 * 
-	 * @param username String (username do utilizador)
-	 * @param password String (password do utilizador)
-	 */
-	public void checkMail(String userName, String password) {
+	
+	public void connect (String userName, String password) {
 		setProperties();
-
 		this.userName = userName;
 
 		try {
@@ -81,6 +73,20 @@ public class FetchEmails {
 			}
 			inbox = store.getFolder("INBOX");
 			inbox.open(Folder.READ_ONLY);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}}
+
+	/**
+	 * Método que confirma se o username e password fornecidos estão corretos e
+	 * acede à conta de email
+	 * 
+	 * @param username String (username do utilizador)
+	 * @param password String (password do utilizador)
+	 * @throws IOException
+	 * @throws MessagingException
+	 */
+	public void checkMail() throws MessagingException, IOException {
 
 			for (int i = 1; i <= inbox.getMessages().length; i++) {
 				msgs.add(new Content(inbox.getMessage(i), userName));
@@ -100,10 +106,7 @@ public class FetchEmails {
 				writer.println(b.getContent());
 				writer.close();
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	
 
 	}
 

@@ -185,10 +185,13 @@ public class BDAButton {
 							dir = new File("Resources/Emails");
 							break;
 						case "Twitter":
-							dir = new File("Resources/Emails");
+							dir = new File("Resources/Tweets");
 							break;
 						case "Facebook":
 							dir = new File("Resources/Posts");
+							for (File file : new File("Resources/GroupPosts").listFiles())
+								if (!file.getName().equals("Untitled"))
+									file.delete();
 							break;
 						}
 

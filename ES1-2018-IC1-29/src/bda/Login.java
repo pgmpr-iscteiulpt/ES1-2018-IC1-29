@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.mail.MessagingException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -41,6 +42,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import twitter4j.TwitterException;
 
 /**
  * Implementa uma JPanel que está associada a uma interface e um botão
@@ -197,6 +200,7 @@ public class Login extends JDialog {
 	 * válidos para efetuar o Login
 	 */
 	public void login() {
+		Object handler;
 
 		String dir = null;
 		int log = 0;
@@ -204,14 +208,17 @@ public class Login extends JDialog {
 		case "Email":
 			dir = "Resources\\Emails";
 			log = 3;
+			contentHandler = new FetchEmails();
 			break;
 		case "Twitter":
 			dir = "Resources\\Tweets";
 			log = 2;
+			contentHandler = new FetchTweets();
 			break;
-		case "Facebook":
+		default:
 			dir = "Resources\\Posts";
 			log = 1;
+			contentHandler = new FetchPosts();
 			break;
 		}
 
@@ -229,18 +236,37 @@ public class Login extends JDialog {
 					}
 				}
 			}
+			if (type.equals("Facebook")) {
+				File folder1 = new File("Resources\\GroupPosts");
+				File[] directoryListing1 = folder1.listFiles();
+				for (File contentFile : directoryListing1) {
+					if (!contentFile.getName().equals("Untitled")) {
+						content.add(new Content(contentFile));
+					}
+				}
+
+				if (type.equals("Email"))
+					((FetchEmails) contentHandler).connect(getUsername(), getPassword());
+				if (type.equals("Facebook") || type.equals("Facebook Group"))
+					((FetchPosts) contentHandler).connect(getToken("Facebook", getUsername(), getPassword()));
+				if (type.equals("Twitter")) {
+					String[] token = getToken("Twitter", getUsername(), getPassword()).split(" ");
+					((FetchTweets) contentHandler).connect(token[0], token[1], token[2], token[3]);
+				}
+			}
 			i.getLog(log).setText(username);
 
-		} else {
+		} else
+
+		{
 
 			if (type.equals("Email")) {
 				try {
-					FetchEmails email = new FetchEmails();
-					email.checkMail(getUsername(), getPassword());
-					content = email.getMsgs();
+					((FetchEmails) contentHandler).connect(getUsername(), getPassword());
+					((FetchEmails) contentHandler).checkMail();
+					content = ((FetchEmails) contentHandler).getMsgs();
 					addXMLElement("Email", getUsername(), getPassword(), null);
 					i.getLog(3).setText(nameField.getText());
-					contentHandler = email;
 				} catch (Exception E) {
 					JOptionPane.showMessageDialog(Login.this, "Invalid username or password", "Login",
 							JOptionPane.ERROR_MESSAGE);
@@ -252,23 +278,29 @@ public class Login extends JDialog {
 				login.dispose();
 				String token = askForToken("Twitter");
 				String[] tokens = token.split(" ");
-				FetchTweets twitter = new FetchTweets();
-				twitter.checkTweets(tokens[0], tokens[1], tokens[2], tokens[3]);
+				((FetchTweets) contentHandler).connect(tokens[0], tokens[1], tokens[2], tokens[3]);
+				try {
+					((FetchTweets) contentHandler).checkTweets();
+				} catch (TwitterException | MessagingException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				addXMLElement("Twitter", getUsername(), getPassword(), token);
-				content = twitter.getStatus();
-				i.getLog(2).setText(twitter.getUserName());
-				contentHandler = twitter;
+				content = ((FetchTweets) contentHandler).getStatus();
+				i.getLog(2).setText(((FetchEmails) contentHandler).getUserName());
+
 			}
 
 			if (type.equals("Facebook")) {
 				login.dispose();
 				String token = askForToken("Facebook");
-				FetchPosts facebook = new FetchPosts();
-				facebook.checkPosts(token);
+				((FetchPosts) contentHandler).connect(token);
+				((FetchPosts) contentHandler).checkPosts();
+				((FetchPosts) contentHandler).checkGroupPosts();
 				addXMLElement("Facebook", getUsername(), getPassword(), token);
-				content = facebook.getPosts();
-				i.getLog(1).setText(facebook.getUserName());
-				contentHandler = facebook;
+				content = ((FetchPosts) contentHandler).getPosts();
+				i.getLog(1).setText(((FetchPosts) contentHandler).getUserName());
+
 			}
 		}
 		b.changeImage();
@@ -296,7 +328,7 @@ public class Login extends JDialog {
 		String message;
 		if (icon.equals("Twitter")) {
 			message = "           Introduza os 4 tokens de acesso a esta conta, separados por um espaço"
-					+ System.lineSeparator() + "                   (apenas o terá de fazer a primeira vez).";
+					+ System.lineSeparator() + "                   (apenas terá de o fazer a primeira vez).";
 		} else {
 			message = "                 Introduza o token de acesso a esta conta" + System.lineSeparator()
 					+ "                   (apenas o terá de fazer a primeira vez).";
@@ -320,15 +352,16 @@ public class Login extends JDialog {
 		if (type.equals("Twitter"))
 			i.getLog(2).setText("Not Logged In   ");
 
-		if (type.equals("Facebook"))
+		if (type.equals("Facebook") || type.equals("Facebook Group"))
 			i.getLog(1).setText("Not Logged In   ");
 
 		if (type.equals("Email"))
 			i.getLog(3).setText("Not Logged In   ");
 
 		for (Content c : ((BDATableModel) i.getInboxTable().getModel()).getTableContent()) {
-			if (c.getType().equals(type))
+			if ((c.getType().equals(type)) || (type.equals("Facebook") && c.getType().equals("Facebook Group")))
 				remove.add(c);
+
 		}
 
 		for (Content r : remove) {
@@ -364,8 +397,6 @@ public class Login extends JDialog {
 		return false;
 
 	}
-
-
 
 	private void addXMLElement(String root, String user, String pass, String token) {
 		Document doc = getXMLDoc();

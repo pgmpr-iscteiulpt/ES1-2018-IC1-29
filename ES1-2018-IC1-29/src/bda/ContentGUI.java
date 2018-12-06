@@ -56,6 +56,7 @@ public class ContentGUI {
 	private JButton send;
 
 	private Object id;
+	private String groupID;
 	private ArrayList<Object> handlers = new ArrayList<>();
 
 	/**
@@ -93,25 +94,30 @@ public class ContentGUI {
 		Image image = icon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
 		icon = new ImageIcon(image);
 
-		if (content.getType().equals("Facebook")) {
-			JButton getLikesComments = new JButton("Likes and Comments");
-			getLikesComments.setPreferredSize(new Dimension(50, 50));
-			center.add(getLikesComments, BorderLayout.SOUTH);
-			addFacebookOperations(getLikesComments);
+		JPanel buttons = new JPanel();
+		reply = new JButton("Reply", icon);
+		reply.setPreferredSize(new Dimension(50, 50));
 
+		if (content.getType().equals("Twitter")) {
+
+			JButton retweet = new JButton("Retweet");
+			reply.setPreferredSize(new Dimension((int) (width * 0.2), (int) (height * 0.05)));
+			retweet.setPreferredSize(new Dimension((int) (width * 0.2), (int) (height * 0.05)));
+			addRetweetOperation(retweet);
+			buttons.add(reply);
+			buttons.add(retweet);
+			center.add(buttons, BorderLayout.SOUTH);
 		} else {
-			reply = new JButton("Reply", icon);
-			reply.setPreferredSize(new Dimension(50, 50));
-
-			if (content.getType().equals("Twitter")) {
-				JPanel buttons = new JPanel();
-				JButton retweet = new JButton("Retweet");
+			if (content.getType().equals("Facebook") || content.getType().equals("Facebook Group")) {
+				JButton getLikesComments = new JButton("Likes and Comments");
 				reply.setPreferredSize(new Dimension((int) (width * 0.2), (int) (height * 0.05)));
-				retweet.setPreferredSize(new Dimension((int) (width * 0.2), (int) (height * 0.05)));
-				addRetweetOperation(retweet);
+				getLikesComments.setPreferredSize(new Dimension((int) (width * 0.2), (int) (height * 0.05)));
 				buttons.add(reply);
-				buttons.add(retweet);
+				buttons.add(getLikesComments);
+				addFacebookOperations(getLikesComments);
 				center.add(buttons, BorderLayout.SOUTH);
+				if (content.getType().equals("Facebook"))
+					reply.setEnabled(false);
 			} else {
 				center.add(reply, BorderLayout.SOUTH);
 			}
@@ -131,16 +137,27 @@ public class ContentGUI {
 				hash = "Resources\\Tweets\\Tweet" + hash;
 			if (content.getType().equals("Facebook"))
 				hash = "Resources\\Posts\\Post" + hash;
+			if (content.getType().equals("Facebook Group"))
+				hash = "Resources\\GroupPosts\\Post" + hash;
 
 			Scanner scanner = new Scanner(
 					new FileReader(new File(System.getProperty("user.dir") + File.separator + hash)));
-			if (content.getType().equals("Twitter"))
-				id = Long.valueOf(scanner.nextLine());
-			if (content.getType().equals("Facebook"))
+
+			if (content.getType().equals("Facebook Group")) {
+				String[] line = scanner.nextLine().split(" ");
+				id = line[0];
+				groupID = line[1];
+			} else {
 				id = scanner.nextLine();
+			}
+			System.out.println(id);
+			scanner.nextLine(); // type
+			scanner.nextLine(); // username
+			scanner.nextLine(); // date
+			scanner.nextLine(); // from
 			String s;
 			t.append("\n");
-			t.append("\n" + "ASSUNTO:   " + content.getSubject().toString() + "\n" + "\n");
+			t.append("\n" + "ASSUNTO:   " + scanner.nextLine() + "\n" + "\n");
 			while (scanner.hasNextLine()) {
 				s = scanner.nextLine();
 				t.append(" " + s + "\n");
@@ -180,7 +197,7 @@ public class ContentGUI {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				south.removeAll();
 				south.setPreferredSize(new Dimension(200, 200));
 
 				text = new JTextArea();
@@ -216,10 +233,12 @@ public class ContentGUI {
 	 * conteúdo
 	 */
 	private void addReplyOperations(String from) {
+
 		reply.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				south.removeAll();
 				south.setPreferredSize(new Dimension(200, 200));
 
 				text = new JTextArea();
@@ -253,12 +272,22 @@ public class ContentGUI {
 
 								twitter.replyTweet((long) id, text.getText());
 
+							} else {
+								if (content.getType().equals("Facebook Group")) {
+									FetchPosts facebook = null;
+									for (Object cH : handlers) {
+										if (cH instanceof FetchPosts)
+											facebook = (FetchPosts) cH;
+									}
+									facebook.replyToPost(groupID, text.getText());
+								}
 							}
 						}
 					}
 				});
 
 				south.add(text, BorderLayout.CENTER);
+				south.updateUI();
 				JPanel n = new JPanel();
 				n.setLayout(new BorderLayout());
 				n.setPreferredSize(new Dimension(200, 50));
@@ -266,8 +295,6 @@ public class ContentGUI {
 				south.add(n, BorderLayout.EAST);
 
 				frame.add(south, BorderLayout.SOUTH);
-				frame.invalidate();
-				frame.validate();
 				frame.repaint();
 			}
 		});

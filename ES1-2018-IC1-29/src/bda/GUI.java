@@ -48,6 +48,7 @@ public class GUI {
 	boolean bFrom;
 	boolean bType;
 	boolean bSubjetc;
+	boolean bTime;
 
 	// TextFields
 	private JTextField log1 = new JTextField("Not Logged In   ");
@@ -203,7 +204,7 @@ public class GUI {
 		JFrame filterParameters = new JFrame("Parâmetros do Filtro");
 		filterParameters.setLocation(screenDim.width / 2 - (int) (width * 0.4) / 2,
 				screenDim.height / 2 - (int) (height * 0.3) / 2);
-		filterParameters.setSize(new Dimension((int) (width * 0.4), (int) (height * 0.3)));
+		filterParameters.setSize(new Dimension((int) (width * 0.4), (int) (height * 0.35)));
 		filterParameters.setLayout(new BorderLayout());
 		filterParameters.setResizable(false);
 
@@ -216,9 +217,11 @@ public class GUI {
 		type.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		JCheckBox subject = new JCheckBox("Assunto");
 		subject.setFont(new Font("SansSerif", Font.PLAIN, 16));
+		JCheckBox time = new JCheckBox("Últimas 24 horas");
+		time.setFont(new Font("SansSerif", Font.PLAIN, 16));
 
 		JPanel checkBoxes = new JPanel();
-		checkBoxes.setLayout(new GridLayout(3, 2));
+		checkBoxes.setLayout(new GridLayout(4, 2));
 		checkBoxes.add(new JLabel(new ImageIcon(
 				new ImageIcon("images/user.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH))));
 		checkBoxes.add(from);
@@ -228,6 +231,9 @@ public class GUI {
 		checkBoxes.add(new JLabel(new ImageIcon(new ImageIcon("images/subject.png").getImage().getScaledInstance(50, 50,
 				java.awt.Image.SCALE_SMOOTH))));
 		checkBoxes.add(subject);
+		checkBoxes.add(new JLabel(new ImageIcon(
+				new ImageIcon("images/moreDay.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH))));
+		checkBoxes.add(time);
 
 		ItemListener il = new ItemListener() {
 
@@ -241,23 +247,27 @@ public class GUI {
 					bType = !bType;
 				if (selected == subject)
 					bSubjetc = !bSubjetc;
+				if (selected == time)
+					bTime = !bTime;
 			}
 		};
 
 		from.addItemListener(il);
 		type.addItemListener(il);
 		subject.addItemListener(il);
+		time.addItemListener(il);
 
 		JButton confirm = new JButton("Confirmar");
-		confirm.setPreferredSize(new Dimension(10,25));
+		confirm.setPreferredSize(new Dimension(10, 25));
 		confirm.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((BDATableModel) inboxTable.getModel()).filter(text, bFrom, bType, bSubjetc);
+				((BDATableModel) inboxTable.getModel()).filter(text, bFrom, bType, bSubjetc, bTime);
 				bFrom = false;
 				bType = false;
 				bSubjetc = false;
+				bTime = false;
 				filterParameters.dispose();
 
 			}

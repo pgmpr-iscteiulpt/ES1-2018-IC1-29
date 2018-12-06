@@ -1,7 +1,14 @@
 package bda;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.mail.MessagingException;
 import javax.swing.table.AbstractTableModel;
 
@@ -20,6 +27,7 @@ public class BDATableModel extends AbstractTableModel {
 	private ArrayList<Content> filteredContent = new ArrayList<>();
 	private String[] columnNames = new String[] { "Data e Hora", "Fonte", "Remetente", "Assunto" };
 	private ArrayList<Object> contentHandlers = new ArrayList<>();
+	private DateComparator dc = new DateComparator();
 
 	/**
 	 * Construtor que recebe uma lista de conteúdos para apresentar
@@ -63,9 +71,9 @@ public class BDATableModel extends AbstractTableModel {
 			case 0:
 				return c.getDate();
 			case 1:
-				return c.getFrom();
-			case 2:
 				return c.getType();
+			case 2:
+				return c.getFrom();
 			case 3:
 				return c.getSubject();
 			}
@@ -75,7 +83,7 @@ public class BDATableModel extends AbstractTableModel {
 		return null;
 	}
 
-	public void filter(String text, boolean from, boolean type, boolean subject) {
+	public void filter(String text, boolean from, boolean type, boolean subject, boolean time) {
 
 		if (backupContent.isEmpty())
 			backupContent.addAll(content);
@@ -83,7 +91,7 @@ public class BDATableModel extends AbstractTableModel {
 		filteredContent.clear();
 		content.clear();
 		// sem filtro
-		if (!from && !type && !subject) {
+		if (!from && !type && !subject && !time) {
 			content.addAll(backupContent);
 			fireTableDataChanged();
 			return;
@@ -103,6 +111,10 @@ public class BDATableModel extends AbstractTableModel {
 					}
 					if (subject) {
 						if (c.getSubject().toLowerCase().contains(text.toLowerCase()))
+							add = true;
+					}
+					if (time) {
+						if (!dc.moreThanDay(c.getDate()))
 							add = true;
 					}
 

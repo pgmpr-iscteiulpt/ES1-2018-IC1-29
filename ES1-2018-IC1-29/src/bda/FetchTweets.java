@@ -1,9 +1,15 @@
 package bda;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.mail.MessagingException;
+
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
@@ -33,13 +39,25 @@ public class FetchTweets {
 
 	private void setProperties() {
 		conf = new ConfigurationBuilder();
-		conf.setDebugEnabled(true).setOAuthConsumerKey(token1)
-				.setOAuthConsumerSecret(token2)
-				.setOAuthAccessToken(token3)
-				.setOAuthAccessTokenSecret(token4);
+		conf.setDebugEnabled(true).setOAuthConsumerKey(token1).setOAuthConsumerSecret(token2)
+				.setOAuthAccessToken(token3).setOAuthAccessTokenSecret(token4);
 
 		factory = new TwitterFactory(conf.build());
 		twitter = factory.getInstance();
+	}
+
+	public void connect(String token1, String token2, String token3, String token4) {
+		this.token1 = token1;
+		this.token2 = token2;
+		this.token3 = token3;
+		this.token4 = token4;
+		setProperties();
+		try {
+			userName = twitter.showUser(twitter.getScreenName()).getName();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
 	}
 
 	/**
@@ -49,36 +67,27 @@ public class FetchTweets {
 	 * @param username String (username do utilizador)
 	 * @param password String (password do utilizador)
 	 * @throws TwitterException
+	 * @throws IOException 
+	 * @throws MessagingException 
 	 * @throws IllegalStateException
 	 */
-	public void checkTweets(String token1, String token2, String token3, String token4) {
-		this.token1 = token1;
-		this.token2 = token2;
-		this.token3 = token3;
-		this.token4 = token4;
-		setProperties();
-		try {
-			userName = twitter.showUser(twitter.getScreenName()).getName();
-			List<Status> statuses = twitter.getHomeTimeline();
+	public void checkTweets() throws TwitterException, MessagingException, IOException {
+		List<Status> statuses = twitter.getHomeTimeline();
 
-			for (Status s : statuses) {
-				Content c = new Content(s, userName);
-				status.add(c);
-				String hash = c.getHashCode();
-				PrintWriter writer = new PrintWriter(
-						System.getProperty("user.dir") + File.separator + "Resources\\Tweets\\Tweet" + hash, "UTF-8");
-				writer.println(s.getId());
-				writer.println("Twitter");
-				writer.println(userName);
-				writer.println(s.getCreatedAt().toString());
-				writer.println(userName);
-				writer.println(((Status) c.getContent()).getText());
-				writer.println(((Status) c.getContent()).getText());
-				writer.close();
-			}
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+		for (Status s : statuses) {
+			Content c = new Content(s, userName);
+			status.add(c);
+			String hash = c.getHashCode();
+			PrintWriter writer = new PrintWriter(
+					System.getProperty("user.dir") + File.separator + "Resources\\Tweets\\Tweet" + hash, "UTF-8");
+			writer.println(s.getId());
+			writer.println("Twitter");
+			writer.println(userName);
+			writer.println(s.getCreatedAt().toString());
+			writer.println(userName);
+			writer.println(((Status) c.getContent()).getText());
+			writer.println(((Status) c.getContent()).getText());
+			writer.close();
 		}
 
 	}
