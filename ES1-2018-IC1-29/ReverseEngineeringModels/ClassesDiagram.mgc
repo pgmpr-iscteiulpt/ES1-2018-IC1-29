@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="bda.ContentGUI" x="1210" y="505">
+        <AttributesDisplayFilter public-accepted="false"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="bda.GUI" endpointName="i" kind="Simple"/>
+        <Association destinationClassName="bda.Content"
+            endpointName="content" kind="Simple"/>
+        <Communication destinationClassName="bda.BDATableModel"/>
+        <Communication destinationClassName="bda.Content"/>
+    </Class>
+    <Class name="bda.DateComparator" x="140" y="120">
+        <AttributesDisplayFilter public-accepted="false"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Communication destinationClassName="bda.Content"/>
+        <Communication destinationClassName="bda.Months"/>
+    </Class>
+    <Class name="bda.BDAButton" x="1151" y="81">
+        <AttributesDisplayFilter public-accepted="false"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="bda.Login"
+            endpointName="login" kind="Simple"/>
+        <Communication destinationClassName="bda.Login"/>
+    </Class>
+    <Class name="bda.BDATableModel" x="57" y="409">
+        <AttributesDisplayFilter public-accepted="false"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="bda.Content"
+            endpointName="backupContent" kind="Simple"/>
+        <Association destinationClassName="bda.Content"
+            endpointName="content" kind="Simple"/>
+        <Association destinationClassName="bda.Content"
+            endpointName="filteredContent" kind="Simple"/>
+        <Association destinationClassName="bda.DateComparator"
+            endpointName="dc" kind="Simple"/>
+        <Communication destinationClassName="bda.DateComparator"/>
+        <Communication destinationClassName="bda.Content"/>
+    </Class>
+    <Class name="ContentHandlers.FetchTweets" x="987" y="734">
+        <AttributesDisplayFilter public-accepted="false"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="bda.Content"
+            endpointName="status" kind="Simple"/>
+        <Communication destinationClassName="bda.Content"/>
+    </Class>
+    <Class name="bda.GUI" x="1265" y="351">
+        <AttributesDisplayFilter public-accepted="false"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="bda.BDAButton"
+            endpointName="old" kind="Simple"/>
+        <Association destinationClassName="bda.BDAButton"
+            endpointName="facebookButton" kind="Simple"/>
+        <Association destinationClassName="bda.BDAButton"
+            endpointName="twitterButton" kind="Simple"/>
+        <Association destinationClassName="bda.BDAButton"
+            endpointName="recent" kind="Simple"/>
+        <Association destinationClassName="bda.BDAButton"
+            endpointName="mailButton" kind="Simple"/>
+    </Class>
+    <Class name="bda.Content" x="697" y="520">
+        <AttributesDisplayFilter public-accepted="false"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="ContentHandlers.FetchEmails" x="121" y="738">
+        <AttributesDisplayFilter public-accepted="false"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="bda.Content"
+            endpointName="msgs" kind="Simple"/>
+        <Communication destinationClassName="bda.Content"/>
+    </Class>
+    <Class name="bda.Months" x="11" y="14">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="bda.Login" x="542" y="64">
+        <AttributesDisplayFilter public-accepted="false"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="bda.BDAButton"
+            endpointName="b" kind="Simple"/>
+        <Association destinationClassName="bda.GUI" endpointName="i" kind="Simple"/>
+        <Association destinationClassName="bda.Content"
+            endpointName="content" kind="Simple"/>
+        <Communication destinationClassName="bda.BDAButton"/>
+        <Communication destinationClassName="bda.BDATableModel"/>
+        <Communication destinationClassName="ContentHandlers.FetchTweets"/>
+        <Communication destinationClassName="bda.Content"/>
+        <Communication destinationClassName="ContentHandlers.FetchEmails"/>
+        <Communication destinationClassName="ContentHandlers.FetchPosts"/>
+    </Class>
+    <Class name="ContentHandlers.FetchPosts" x="617" y="737">
+        <AttributesDisplayFilter public-accepted="false"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association destinationClassName="bda.Content"
+            endpointName="posts" kind="Simple"/>
+        <Communication destinationClassName="bda.Content"/>
+    </Class>
+</ClassDiagram>
