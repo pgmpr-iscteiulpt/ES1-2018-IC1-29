@@ -202,9 +202,10 @@ public class BDAButton {
 						for (File file : dir.listFiles())
 							if (!file.getName().equals("Untitled"))
 								file.delete();
+
 						login.logout();
-						deleteFromXML(iconName, login.getUsername());
 						logged = false;
+						deleteFromXML(iconName, login.getUsername());
 					}
 					if (value == JOptionPane.NO_OPTION) {
 						UIManager.put("OptionPane.minimumSize", new Dimension(450, 130));
@@ -280,6 +281,10 @@ public class BDAButton {
 
 		login.writeXML(doc);
 
+	}
+
+	public void setLogged(boolean a) {
+		logged = a;
 	}
 
 }

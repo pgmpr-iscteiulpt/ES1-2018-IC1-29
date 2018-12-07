@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="AllTests" project="ES1-2018-IC1-29" tests="27" started="27" failures="0" errors="0" ignored="0">
+  <testsuite name="jUnitTests.AllTests" time="58.198">
+    <testsuite name="jUnitTests.TestBDAButton" time="1.023">
+      <testcase name="testgetIconName" classname="jUnitTests.TestBDAButton" time="0.622"/>
+      <testcase name="testChangeImage" classname="jUnitTests.TestBDAButton" time="0.2"/>
+      <testcase name="testChangeState" classname="jUnitTests.TestBDAButton" time="0.201"/>
+    </testsuite>
+    <testsuite name="jUnitTests.TestBDATableModel" time="0.0">
+      <testcase name="testBDATableModel" classname="jUnitTests.TestBDATableModel" time="0.0"/>
+      <testcase name="testGetTableContent" classname="jUnitTests.TestBDATableModel" time="0.0"/>
+      <testcase name="testGetMessageAt" classname="jUnitTests.TestBDATableModel" time="0.0"/>
+      <testcase name="testGetContentHandlers" classname="jUnitTests.TestBDATableModel" time="0.0"/>
+      <testcase name="testGetColumnNameInt" classname="jUnitTests.TestBDATableModel" time="0.0"/>
+      <testcase name="testGetValueAt" classname="jUnitTests.TestBDATableModel" time="0.0"/>
+      <testcase name="testGetRowCount" classname="jUnitTests.TestBDATableModel" time="0.0"/>
+      <testcase name="testGetColumnCount" classname="jUnitTests.TestBDATableModel" time="0.0"/>
+    </testsuite>
+    <testsuite name="jUnitTests.TestContent" time="0.0">
+      <testcase name="testGetFrom" classname="jUnitTests.TestContent" time="0.0"/>
+      <testcase name="testGetType" classname="jUnitTests.TestContent" time="0.0"/>
+      <testcase name="testGetUserName" classname="jUnitTests.TestContent" time="0.0"/>
+      <testcase name="testGetContent" classname="jUnitTests.TestContent" time="0.0"/>
+    </testsuite>
+    <testsuite name="jUnitTests.TestContentGUI" time="0.169">
+      <testcase name="testNullGUI" classname="jUnitTests.TestContentGUI" time="0.169"/>
+    </testsuite>
+    <testsuite name="jUnitTests.TestDateComparator" time="0.016">
+      <testcase name="testeNullCompare" classname="jUnitTests.TestDateComparator" time="0.016"/>
+    </testsuite>
+    <testsuite name="jUnitTests.TestFetchEmails" time="52.44">
+      <testcase name="testGetUsername" classname="jUnitTests.TestFetchEmails" time="26.768"/>
+      <testcase name="emailReturnEmails" classname="jUnitTests.TestFetchEmails" time="25.672"/>
+    </testsuite>
+    <testsuite name="jUnitTests.TestFetchPosts" time="2.18">
+      <testcase name="testReturnGroupPosts" classname="jUnitTests.TestFetchPosts" time="1.311"/>
+      <testcase name="testGetUsername" classname="jUnitTests.TestFetchPosts" time="0.359"/>
+      <testcase name="testReturnPosts" classname="jUnitTests.TestFetchPosts" time="0.51"/>
+    </testsuite>
+    <testsuite name="jUnitTests.TestFetchTweets" time="1.68">
+      <testcase name="twitterReturnTweets" classname="jUnitTests.TestFetchTweets" time="0.93"/>
+      <testcase name="testGetUsername" classname="jUnitTests.TestFetchTweets" time="0.75"/>
+    </testsuite>
+    <testsuite name="jUnitTests.TestGUI" time="0.43">
+      <testcase name="testGetInboxTable" classname="jUnitTests.TestGUI" time="0.21"/>
+      <testcase name="testGetLog" classname="jUnitTests.TestGUI" time="0.22"/>
+    </testsuite>
+    <testsuite name="jUnitTests.TestLogin" time="0.26">
+      <testcase name="testState" classname="jUnitTests.TestLogin" time="0.26"/>
+    </testsuite>
+  </testsuite>
+</testrun>

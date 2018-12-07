@@ -345,6 +345,7 @@ public class ContentGUI {
 								}
 								if (twitter != null) {
 									twitter.replyTweet(Long.parseLong((String) id), text.getText());
+									text.setText("");
 									showMessage(true);
 								} else {
 									showMessage(false);

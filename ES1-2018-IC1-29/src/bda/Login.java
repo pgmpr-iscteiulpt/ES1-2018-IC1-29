@@ -256,12 +256,14 @@ public class Login extends JDialog {
 							"Ligação sem sucesso", JOptionPane.INFORMATION_MESSAGE);
 				}
 			if (type.equals("Facebook") || type.equals("Facebook Group"))
+
 				((FetchPosts) contentHandler).connect(getToken("Facebook", getUsername(), getPassword()));
+
 			if (type.equals("Twitter")) {
 				String[] token = getToken("Twitter", getUsername(), getPassword()).split(" ");
 				((FetchTweets) contentHandler).connect(token[0], token[1], token[2], token[3]);
 			}
-
+			b.setLogged(true);
 			i.getLog(log).setText(username);
 
 		} else
@@ -269,7 +271,7 @@ public class Login extends JDialog {
 		{
 
 			if (type.equals("Email")) {
-				
+
 				try {
 					((FetchEmails) contentHandler).connect(getUsername(), getPassword());
 					((FetchEmails) contentHandler).checkMail();
@@ -282,6 +284,7 @@ public class Login extends JDialog {
 					login.dispose();
 					return;
 				}
+				b.setLogged(true);
 				addXMLElement("Email", getUsername(), getPassword(), null);
 				i.getLog(3).setText(nameField.getText());
 			}
@@ -298,6 +301,7 @@ public class Login extends JDialog {
 							"Login sem sucesso", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
+				b.setLogged(true);
 				addXMLElement("Twitter", getUsername(), getPassword(), token);
 				i.getLog(2).setText(((FetchTweets) contentHandler).getUserName());
 
@@ -318,7 +322,7 @@ public class Login extends JDialog {
 					return;
 
 				}
-
+				b.setLogged(true);
 				addXMLElement("Facebook", getUsername(), getPassword(), token);
 				i.getLog(1).setText(((FetchPosts) contentHandler).getUserName());
 
@@ -333,10 +337,15 @@ public class Login extends JDialog {
 			i.getInboxTable().getColumnModel().getColumn(3)
 					.setPreferredWidth((int) (i.getInboxTable().getWidth() * 0.4));
 		} else {
+			ArrayList<Content> tempList = new ArrayList<>();
 			for (Content c : content) {
-				((BDATableModel) i.getInboxTable().getModel()).addRow(c);
-				((AbstractTableModel) i.getInboxTable().getModel()).fireTableDataChanged();
+				tempList.add(c);
 			}
+			for (Content c : tempList) {
+				((BDATableModel) i.getInboxTable().getModel()).addRow(c);
+			}
+			((AbstractTableModel) i.getInboxTable().getModel()).fireTableDataChanged();
+
 		}
 
 		ArrayList<Object> handlers = ((BDATableModel) i.getInboxTable().getModel()).getContentHandlers();
@@ -368,6 +377,7 @@ public class Login extends JDialog {
 	 * M�todo que permite o utilizador fazer Loggout
 	 */
 	public void logout() {
+		System.out.println("enntrei");
 		ArrayList<Content> remove = new ArrayList<Content>();
 
 		if (type.equals("Twitter"))
@@ -379,7 +389,7 @@ public class Login extends JDialog {
 		if (type.equals("Email"))
 			i.getLog(3).setText("Not Logged In   ");
 
-		if (i.getInboxTable().getModel() instanceof BDATableModel) {
+		if (!(i.getInboxTable().getModel() instanceof BDATableModel)) {
 			JOptionPane.showMessageDialog(null, "Impossível efetuar operações sem fazer login primeiro", "Erro",
 					JOptionPane.INFORMATION_MESSAGE);
 		} else {
@@ -450,7 +460,7 @@ public class Login extends JDialog {
 			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;
 			docBuilder = docBuilderFactory.newDocumentBuilder();
-			doc = docBuilder.parse(new File("Files\\config.xml"));
+			doc = docBuilder.parse(new File("config.xml"));
 			doc.getDocumentElement().normalize();
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			e.printStackTrace();
@@ -465,7 +475,7 @@ public class Login extends JDialog {
 		try {
 			transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("Files\\config.xml"));
+			StreamResult result = new StreamResult(new File("config.xml"));
 			transformer.transform(source, result);
 		} catch (TransformerException e) {
 			e.printStackTrace();

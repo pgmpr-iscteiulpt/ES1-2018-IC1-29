@@ -3,15 +3,18 @@ package ContentHandlers;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import java.util.ArrayList;
 import java.util.Properties;
 
+import javax.mail.Authenticator;
 import javax.mail.BodyPart;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
@@ -48,7 +51,8 @@ public class FetchEmails {
 	private Session session;
 	private Store store;
 	private Folder inbox;
-	private static boolean textIsHtml = false;
+	private PasswordAuthentication p;
+	private boolean textIsHTML = false;
 
 	/**
 	 * M�todo que devolve um arraylist de Conte�dos
@@ -71,13 +75,18 @@ public class FetchEmails {
 	public void connect(String userName, String password) throws MessagingException {
 		setProperties();
 		this.userName = userName;
-		session = Session.getInstance(props, null);
+		p = new PasswordAuthentication(userName, password);
+		Authenticator a = new Authenticator() { @Override
+			protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+				// TODO Auto-generated method stub
+				return p;
+			};
+		};
+		session = Session.getInstance(props, a);
 		store = session.getStore();
 		store.connect("imap.gmail.com", userName, password);
 		inbox = store.getFolder("INBOX");
 		inbox.open(Folder.READ_ONLY);
-		
-	
 	}
 
 	/**
@@ -129,11 +138,11 @@ public class FetchEmails {
 
 	public void sendEmail(String to, String from, String subject, String text) {
 
+
 		try {
 
 			// Create a default MimeMessage object.
 			Message message = new MimeMessage(session);
-
 			// Set From: header field of the header.
 			message.setFrom(new InternetAddress(from));
 
@@ -149,8 +158,6 @@ public class FetchEmails {
 			// Send message
 			Transport.send(message);
 
-			System.out.println("Sent message successfully....");
-
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);
 		}
@@ -164,7 +171,7 @@ public class FetchEmails {
 	public String getText(Part p) throws MessagingException, IOException {
 		if (p.isMimeType("text/*")) {
 			String s = (String) p.getContent();
-			textIsHtml = p.isMimeType("text/html");
+			textIsHTML = p.isMimeType("text/html");
 			return s;
 		}
 
