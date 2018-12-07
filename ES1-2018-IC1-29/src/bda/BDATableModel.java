@@ -13,7 +13,7 @@ import javax.mail.MessagingException;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Implementa um modelo de JTable adaptado à listagem de emails, tweets e posts
+ * Implementa um modelo de JTable adaptado ï¿½ listagem de emails, tweets e posts
  * 
  * @author Grupo 29
  * @version 2.0
@@ -30,7 +30,7 @@ public class BDATableModel extends AbstractTableModel {
 	private DateComparator dc = new DateComparator();
 
 	/**
-	 * Construtor que recebe uma lista de conteúdos para apresentar
+	 * Construtor que recebe uma lista de conteï¿½dos para apresentar
 	 * 
 	 * @param content ArrayList<Content> a apresentar
 	 */
@@ -39,9 +39,9 @@ public class BDATableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * Método que devolve o número de colunas
+	 * Mï¿½todo que devolve o nï¿½mero de colunas
 	 * 
-	 * @return Integer (número de colunas)
+	 * @return Integer (nï¿½mero de colunas)
 	 */
 	@Override
 	public int getColumnCount() {
@@ -49,9 +49,9 @@ public class BDATableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * Método que devolve o número de linhas
+	 * Mï¿½todo que devolve o nï¿½mero de linhas
 	 * 
-	 * @return Integer (número de linhas)
+	 * @return Integer (nï¿½mero de linhas)
 	 */
 	@Override
 	public int getRowCount() {
@@ -59,9 +59,9 @@ public class BDATableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * Método que devolve o valor de uma determinada célula
+	 * Mï¿½todo que devolve o valor de uma determinada cï¿½lula
 	 * 
-	 * @return Object (informação da mensagem contida na célula)
+	 * @return Object (informaï¿½ï¿½o da mensagem contida na cï¿½lula)
 	 */
 	@Override
 	public Object getValueAt(int row, int column) {
@@ -133,7 +133,7 @@ public class BDATableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * Método que devolve uma String com o nome da coluna
+	 * Mï¿½todo que devolve uma String com o nome da coluna
 	 * 
 	 * @return Content (de uma determinada coluna)
 	 * @throws MessagingException
@@ -145,7 +145,7 @@ public class BDATableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * Método que devolve uma String com o nome da coluna
+	 * Mï¿½todo que devolve uma String com o nome da coluna
 	 * 
 	 * @return String (nome da coluna)
 	 */
@@ -154,7 +154,7 @@ public class BDATableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * Método que adiciona uma linha à lista de conteúdos
+	 * Mï¿½todo que adiciona uma linha ï¿½ lista de conteï¿½dos
 	 * 
 	 * @param c Content
 	 */
@@ -163,7 +163,7 @@ public class BDATableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * Método que retorna um arraylist com o conteúdo da tabela
+	 * Mï¿½todo que retorna um arraylist com o conteï¿½do da tabela
 	 * 
 	 * @return content ArrayList<Content>
 	 */

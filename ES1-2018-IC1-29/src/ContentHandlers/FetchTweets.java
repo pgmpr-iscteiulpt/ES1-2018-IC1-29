@@ -1,4 +1,4 @@
-package bda;
+package ContentHandlers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.MessagingException;
+import javax.swing.JOptionPane;
 
+import bda.Content;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
@@ -18,8 +20,8 @@ import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
 /**
- * Acede à caixa de entrada de uma conta do twitter tendo em conta que o
- * username e password fornecidos são corretos
+ * Acede ï¿½ caixa de entrada de uma conta do twitter tendo em conta que o
+ * username e password fornecidos sï¿½o corretos
  * 
  * @author Grupo 29
  * @version 2.0
@@ -55,20 +57,22 @@ public class FetchTweets {
 		try {
 			userName = twitter.showUser(twitter.getScreenName()).getName();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			JOptionPane.showMessageDialog(null,
+					"NÃ£o foi possÃ­vel ligar ao servico Twitter. Algumas funcionalidades poderÃ£o nÃ£o estar disponÃ­veis",
+					"LigaÃ§Ã£o sem sucesso", JOptionPane.INFORMATION_MESSAGE);
 		}
 
 	}
 
 	/**
-	 * Método que confirma se o username e password fornecidos estão corretos e
-	 * acede à conta do twitter
+	 * Mï¿½todo que confirma se o username e password fornecidos estï¿½o corretos e
+	 * acede ï¿½ conta do twitter
 	 * 
 	 * @param username String (username do utilizador)
 	 * @param password String (password do utilizador)
 	 * @throws TwitterException
-	 * @throws IOException 
-	 * @throws MessagingException 
+	 * @throws IOException
+	 * @throws MessagingException
 	 * @throws IllegalStateException
 	 */
 	public void checkTweets() throws TwitterException, MessagingException, IOException {
@@ -84,7 +88,7 @@ public class FetchTweets {
 			writer.println("Twitter");
 			writer.println(userName);
 			writer.println(s.getCreatedAt().toString());
-			writer.println(userName);
+			writer.println(s.getUser().getName());
 			writer.println(((Status) c.getContent()).getText());
 			writer.println(((Status) c.getContent()).getText());
 			writer.close();
@@ -112,7 +116,7 @@ public class FetchTweets {
 	}
 
 	/**
-	 * Método que devolve um arraylist de Conteúdos
+	 * Mï¿½todo que devolve um arraylist de Conteï¿½dos
 	 * 
 	 * @return status ArrayList<Content> (tweets que constam no twitter do
 	 *         utilizador)

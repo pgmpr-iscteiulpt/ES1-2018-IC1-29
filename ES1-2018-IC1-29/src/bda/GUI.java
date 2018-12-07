@@ -15,13 +15,13 @@ import javax.mail.MessagingException;
 import javax.swing.*;
 
 /**
- * Cria uma JFrame representativa da interface de um software dedicado à
- * integração de informação académica com origem em vários sistemas
+ * Cria uma JFrame representativa da interface de um software dedicado ï¿½
+ * integraï¿½ï¿½o de informaï¿½ï¿½o acadï¿½mica com origem em vï¿½rios sistemas
  * 
  * @author Grupo 29
  * @version 2.0
  */
-
+ 
 public class GUI {
 
 	// Constants
@@ -63,7 +63,7 @@ public class GUI {
 	private JLabel logo;
 
 	/**
-	 * Construtor de uma Janela que possui toda a interface gráfica do software
+	 * Construtor de uma Janela que possui toda a interface grï¿½fica do software
 	 */
 	public GUI() {
 
@@ -180,8 +180,8 @@ public class GUI {
 	}
 
 	/**
-	 * Método que permite a visualização de uma nova Janela referente apenas ao
-	 * conteúdo selecionado
+	 * Mï¿½todo que permite a visualizaï¿½ï¿½o de uma nova Janela referente apenas ao
+	 * conteï¿½do selecionado
 	 * 
 	 * @param t JTable
 	 */
@@ -201,14 +201,14 @@ public class GUI {
 
 	private void getFilteredContent(String text) {
 
-		JFrame filterParameters = new JFrame("Parâmetros do Filtro");
+		JFrame filterParameters = new JFrame("Parï¿½metros do Filtro");
 		filterParameters.setLocation(screenDim.width / 2 - (int) (width * 0.4) / 2,
 				screenDim.height / 2 - (int) (height * 0.3) / 2);
 		filterParameters.setSize(new Dimension((int) (width * 0.4), (int) (height * 0.35)));
 		filterParameters.setLayout(new BorderLayout());
 		filterParameters.setResizable(false);
 
-		JLabel label = new JLabel(" Escolha os parâmetros a que deseja aplicar o filtro \"" + text + "\":");
+		JLabel label = new JLabel(" Escolha os parï¿½metros a que deseja aplicar o filtro \"" + text + "\":");
 		label.setFont(new Font("SansSerif", Font.PLAIN, 16));
 
 		JCheckBox from = new JCheckBox("Remetente");
@@ -217,7 +217,7 @@ public class GUI {
 		type.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		JCheckBox subject = new JCheckBox("Assunto");
 		subject.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		JCheckBox time = new JCheckBox("Últimas 24 horas");
+		JCheckBox time = new JCheckBox("ï¿½ltimas 24 horas");
 		time.setFont(new Font("SansSerif", Font.PLAIN, 16));
 
 		JPanel checkBoxes = new JPanel();
@@ -282,7 +282,7 @@ public class GUI {
 	}
 
 	/**
-	 * Método que devolve uma JTextField
+	 * Mï¿½todo que devolve uma JTextField
 	 * 
 	 * @return JTextField (conta do utilizador)
 	 */
@@ -301,16 +301,16 @@ public class GUI {
 	}
 
 	/**
-	 * Método que devolve uma JTable
+	 * Mï¿½todo que devolve uma JTable
 	 * 
-	 * @return JTable (local onde se disponibiliza toda a informação do software)
+	 * @return JTable (local onde se disponibiliza toda a informaï¿½ï¿½o do software)
 	 */
 	public JTable getInboxTable() {
 		return inboxTable;
 	}
 
 	/**
-	 * Método que permite a visualização da Janela
+	 * Mï¿½todo que permite a visualizaï¿½ï¿½o da Janela
 	 */
 	public void open() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

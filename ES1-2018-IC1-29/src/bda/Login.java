@@ -43,10 +43,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import ContentHandlers.FetchEmails;
+import ContentHandlers.FetchPosts;
+import ContentHandlers.FetchTweets;
 import twitter4j.TwitterException;
 
 /**
- * Implementa uma JPanel que está associada a uma interface e um botão
+ * Implementa uma JPanel que estï¿½ associada a uma interface e um botï¿½o
  * 
  * @author Grupo 29
  * @version 2.0
@@ -78,10 +81,10 @@ public class Login extends JDialog {
 	private BDAButton b;
 
 	/**
-	 * Construtor de uma Janela Login que possui uma interface e um respectivo botão
+	 * Construtor de uma Janela Login que possui uma interface e um respectivo botï¿½o
 	 * 
 	 * @param i Interface a que pertence a Janela Login
-	 * @param b Botão que faz aparecer a Janela Login
+	 * @param b Botï¿½o que faz aparecer a Janela Login
 	 */
 	public Login(GUI i, BDAButton b) {
 		this.i = i;
@@ -97,16 +100,16 @@ public class Login extends JDialog {
 	}
 
 	/**
-	 * Método que permite a visualização da Janela Login
+	 * Mï¿½todo que permite a visualizaï¿½ï¿½o da Janela Login
 	 */
 	public void open() {
 		login.setSize(width, height);
 		login.setVisible(true);
 	}
 
-	// Criação da janela
+	// Criaï¿½ï¿½o da janela
 	/**
-	 * Método que permite criar o design da Janela Login
+	 * Mï¿½todo que permite criar o design da Janela Login
 	 */
 	private void addLoginDialogContent() {
 
@@ -148,7 +151,7 @@ public class Login extends JDialog {
 	}
 
 	/**
-	 * Método que devolve o nome do utilizador
+	 * Mï¿½todo que devolve o nome do utilizador
 	 * 
 	 * @return String (mail do utilizador que pretende fazer o Login)
 	 */
@@ -157,7 +160,7 @@ public class Login extends JDialog {
 	}
 
 	/**
-	 * Método que devolve a password do utilizador
+	 * Mï¿½todo que devolve a password do utilizador
 	 * 
 	 * @return String (password do utilizador que pretende fazer o Login)
 	 */
@@ -166,7 +169,7 @@ public class Login extends JDialog {
 	}
 
 	/**
-	 * Método que implementa as ações para cada ativação dos botões
+	 * Mï¿½todo que implementa as aï¿½ï¿½es para cada ativaï¿½ï¿½o dos botï¿½es
 	 */
 	private void addLoginDialogListeners() {
 
@@ -196,11 +199,10 @@ public class Login extends JDialog {
 
 	// Login nos canais
 	/**
-	 * Método que permite averiguar se o email e password dados pelo utilizador são
-	 * válidos para efetuar o Login
+	 * Mï¿½todo que permite averiguar se o email e password dados pelo utilizador sï¿½o
+	 * vï¿½lidos para efetuar o Login
 	 */
 	public void login() {
-		Object handler;
 
 		String dir = null;
 		int log = 0;
@@ -244,16 +246,22 @@ public class Login extends JDialog {
 						content.add(new Content(contentFile));
 					}
 				}
-
-				if (type.equals("Email"))
-					((FetchEmails) contentHandler).connect(getUsername(), getPassword());
-				if (type.equals("Facebook") || type.equals("Facebook Group"))
-					((FetchPosts) contentHandler).connect(getToken("Facebook", getUsername(), getPassword()));
-				if (type.equals("Twitter")) {
-					String[] token = getToken("Twitter", getUsername(), getPassword()).split(" ");
-					((FetchTweets) contentHandler).connect(token[0], token[1], token[2], token[3]);
-				}
 			}
+			if (type.equals("Email"))
+				try {
+					((FetchEmails) contentHandler).connect(getUsername(), getPassword());
+				} catch (MessagingException e) {
+					JOptionPane.showMessageDialog(null,
+							"NÃ£o foi possÃ­vel ligar ao servico de Email. Algumas funcionalidades poderÃ£o nÃ£o estar disponÃ­veis",
+							"LigaÃ§Ã£o sem sucesso", JOptionPane.INFORMATION_MESSAGE);
+				}
+			if (type.equals("Facebook") || type.equals("Facebook Group"))
+				((FetchPosts) contentHandler).connect(getToken("Facebook", getUsername(), getPassword()));
+			if (type.equals("Twitter")) {
+				String[] token = getToken("Twitter", getUsername(), getPassword()).split(" ");
+				((FetchTweets) contentHandler).connect(token[0], token[1], token[2], token[3]);
+			}
+
 			i.getLog(log).setText(username);
 
 		} else
@@ -261,44 +269,57 @@ public class Login extends JDialog {
 		{
 
 			if (type.equals("Email")) {
+				
 				try {
 					((FetchEmails) contentHandler).connect(getUsername(), getPassword());
 					((FetchEmails) contentHandler).checkMail();
 					content = ((FetchEmails) contentHandler).getMsgs();
-					addXMLElement("Email", getUsername(), getPassword(), null);
-					i.getLog(3).setText(nameField.getText());
 				} catch (Exception E) {
-					JOptionPane.showMessageDialog(Login.this, "Invalid username or password", "Login",
-							JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "NÃ£o foi possÃ­vel ligar ao servico de Email",
+							"Login sem sucesso", JOptionPane.ERROR_MESSAGE);
 					nameField.setText("");
 					passwordField.setText("");
+					login.dispose();
+					return;
 				}
+				addXMLElement("Email", getUsername(), getPassword(), null);
+				i.getLog(3).setText(nameField.getText());
 			}
 			if (type.equals("Twitter")) {
 				login.dispose();
 				String token = askForToken("Twitter");
 				String[] tokens = token.split(" ");
-				((FetchTweets) contentHandler).connect(tokens[0], tokens[1], tokens[2], tokens[3]);
 				try {
+					((FetchTweets) contentHandler).connect(tokens[0], tokens[1], tokens[2], tokens[3]);
 					((FetchTweets) contentHandler).checkTweets();
+					content = ((FetchTweets) contentHandler).getStatus();
 				} catch (TwitterException | MessagingException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "NÃ£o foi possÃ­vel ligar ao servico Twitter",
+							"Login sem sucesso", JOptionPane.ERROR_MESSAGE);
+					return;
 				}
 				addXMLElement("Twitter", getUsername(), getPassword(), token);
-				content = ((FetchTweets) contentHandler).getStatus();
-				i.getLog(2).setText(((FetchEmails) contentHandler).getUserName());
+				i.getLog(2).setText(((FetchTweets) contentHandler).getUserName());
 
 			}
 
 			if (type.equals("Facebook")) {
 				login.dispose();
 				String token = askForToken("Facebook");
-				((FetchPosts) contentHandler).connect(token);
-				((FetchPosts) contentHandler).checkPosts();
-				((FetchPosts) contentHandler).checkGroupPosts();
+
+				try {
+					((FetchPosts) contentHandler).connect(token);
+					((FetchPosts) contentHandler).checkPosts();
+					((FetchPosts) contentHandler).checkGroupPosts();
+					content = ((FetchPosts) contentHandler).getPosts();
+				} catch (MessagingException | IOException e) {
+					JOptionPane.showMessageDialog(null, "NÃ£o foi possÃ­vel ligar ao servico Facebook",
+							"Login sem sucesso", JOptionPane.ERROR_MESSAGE);
+					return;
+
+				}
+
 				addXMLElement("Facebook", getUsername(), getPassword(), token);
-				content = ((FetchPosts) contentHandler).getPosts();
 				i.getLog(1).setText(((FetchPosts) contentHandler).getUserName());
 
 			}
@@ -319,7 +340,7 @@ public class Login extends JDialog {
 		}
 
 		ArrayList<Object> handlers = ((BDATableModel) i.getInboxTable().getModel()).getContentHandlers();
-		if (!handlers.contains(contentHandler))
+		if (!handlers.contains(contentHandler) && contentHandler != null)
 			((BDATableModel) i.getInboxTable().getModel()).addContentHandler(contentHandler);
 	}
 
@@ -327,11 +348,11 @@ public class Login extends JDialog {
 
 		String message;
 		if (icon.equals("Twitter")) {
-			message = "           Introduza os 4 tokens de acesso a esta conta, separados por um espaço"
-					+ System.lineSeparator() + "                   (apenas terá de o fazer a primeira vez).";
+			message = "           Introduza os 4 tokens de acesso a esta conta, separados por um espaï¿½o"
+					+ System.lineSeparator() + "                   (apenas terï¿½ de o fazer a primeira vez).";
 		} else {
 			message = "                 Introduza o token de acesso a esta conta" + System.lineSeparator()
-					+ "                   (apenas o terá de fazer a primeira vez).";
+					+ "                   (apenas o terï¿½ de fazer a primeira vez).";
 		}
 		UIManager.put("OptionPane.minimumSize", new Dimension(450, 130));
 		String token = (String) JOptionPane.showInputDialog(null, message, "Novo Utilizador",
@@ -344,7 +365,7 @@ public class Login extends JDialog {
 	}
 
 	/**
-	 * Método que permite o utilizador fazer Loggout
+	 * Mï¿½todo que permite o utilizador fazer Loggout
 	 */
 	public void logout() {
 		ArrayList<Content> remove = new ArrayList<Content>();
@@ -358,14 +379,17 @@ public class Login extends JDialog {
 		if (type.equals("Email"))
 			i.getLog(3).setText("Not Logged In   ");
 
-		for (Content c : ((BDATableModel) i.getInboxTable().getModel()).getTableContent()) {
-			if ((c.getType().equals(type)) || (type.equals("Facebook") && c.getType().equals("Facebook Group")))
-				remove.add(c);
-
-		}
-
-		for (Content r : remove) {
-			((BDATableModel) i.getInboxTable().getModel()).getTableContent().remove(r);
+		if (i.getInboxTable().getModel() instanceof BDATableModel) {
+			JOptionPane.showMessageDialog(null, "ImpossÃ­vel efetuar operaÃ§Ãµes sem fazer login primeiro", "Erro",
+					JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			for (Content c : ((BDATableModel) i.getInboxTable().getModel()).getTableContent()) {
+				if ((c.getType().equals(type)) || (type.equals("Facebook") && c.getType().equals("Facebook Group")))
+					remove.add(c);
+			}
+			for (Content r : remove) {
+				((BDATableModel) i.getInboxTable().getModel()).getTableContent().remove(r);
+			}
 		}
 		remove.clear();
 		((AbstractTableModel) i.getInboxTable().getModel()).fireTableDataChanged();
@@ -426,7 +450,7 @@ public class Login extends JDialog {
 			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder;
 			docBuilder = docBuilderFactory.newDocumentBuilder();
-			doc = docBuilder.parse(new File("config.xml"));
+			doc = docBuilder.parse(new File("Files\\config.xml"));
 			doc.getDocumentElement().normalize();
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			e.printStackTrace();
@@ -441,7 +465,7 @@ public class Login extends JDialog {
 		try {
 			transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("config.xml"));
+			StreamResult result = new StreamResult(new File("Files\\config.xml"));
 			transformer.transform(source, result);
 		} catch (TransformerException e) {
 			e.printStackTrace();

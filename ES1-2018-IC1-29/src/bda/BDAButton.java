@@ -30,7 +30,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Implementa um botão a que será atribuído uma interface, imagem e
+ * Implementa um botï¿½o a que serï¿½ atribuï¿½do uma interface, imagem e
  * funcionalidade
  * 
  * @author Grupo 29
@@ -52,10 +52,10 @@ public class BDAButton {
 	private boolean logged = false;
 
 	/**
-	 * Construtor de um botão que possui uma interface e uma imagem
+	 * Construtor de um botï¿½o que possui uma interface e uma imagem
 	 * 
-	 * @param i        Interface a que pertence o botão
-	 * @param iconName Nome da imagem que possuirá o botão
+	 * @param i        Interface a que pertence o botï¿½o
+	 * @param iconName Nome da imagem que possuirï¿½ o botï¿½o
 	 */
 	public BDAButton(GUI i, String iconName) {
 		this.iconName = iconName;
@@ -68,11 +68,11 @@ public class BDAButton {
 	}
 
 	/**
-	 * Construtor de um botão que possui uma interface, uma imagem e uma ordem
+	 * Construtor de um botï¿½o que possui uma interface, uma imagem e uma ordem
 	 * 
-	 * @param i        Interface a que pertence o botão
-	 * @param iconName Nome da imagem que possuirá o botão
-	 * @param order    Ordem pela qual é caracterizado o botão
+	 * @param i        Interface a que pertence o botï¿½o
+	 * @param iconName Nome da imagem que possuirï¿½ o botï¿½o
+	 * @param order    Ordem pela qual ï¿½ caracterizado o botï¿½o
 	 */
 	public BDAButton(GUI i, String iconName, boolean order) {
 		this.order = order;
@@ -83,10 +83,10 @@ public class BDAButton {
 	}
 
 	/**
-	 * Método que devolve uma ImageIcon
+	 * Mï¿½todo que devolve uma ImageIcon
 	 * 
 	 * @param n Nome que representa a imagem
-	 * @return ImagemIcon (imagem do botão)
+	 * @return ImagemIcon (imagem do botï¿½o)
 	 */
 	public ImageIcon getIconButton(String n) {
 
@@ -103,7 +103,7 @@ public class BDAButton {
 	}
 
 	/**
-	 * Método que altera a imagem do botão conforme o seu estado
+	 * Mï¿½todo que altera a imagem do botï¿½o conforme o seu estado
 	 */
 	public void changeImage() {
 		if (state) {
@@ -114,7 +114,7 @@ public class BDAButton {
 	}
 
 	/**
-	 * Método que altera o estado do botão
+	 * Mï¿½todo que altera o estado do botï¿½o
 	 */
 	public void changeState() {
 		if (state) {
@@ -125,7 +125,7 @@ public class BDAButton {
 	}
 
 	/**
-	 * Método que devolve um botão
+	 * Mï¿½todo que devolve um botï¿½o
 	 * 
 	 * @return JButton (this)
 	 */
@@ -134,7 +134,7 @@ public class BDAButton {
 	}
 
 	/**
-	 * Método que devolve o estado de um botão
+	 * Mï¿½todo que devolve o estado de um botï¿½o
 	 * 
 	 * @return boolean (state)
 	 */
@@ -143,7 +143,7 @@ public class BDAButton {
 	}
 
 	/**
-	 * Método que devolve o nome de um botão
+	 * Mï¿½todo que devolve o nome de um botï¿½o
 	 * 
 	 * @return String (iconName)
 	 */
@@ -152,7 +152,7 @@ public class BDAButton {
 	}
 
 	/**
-	 * Método que ordena cronologicamente a informação da inbox
+	 * Mï¿½todo que ordena cronologicamente a informaï¿½ï¿½o da inbox
 	 */
 
 	private void addLogOperations() {
@@ -172,10 +172,14 @@ public class BDAButton {
 				}
 				if (SwingUtilities.isRightMouseButton(evnt)) {
 					UIManager.put("OptionPane.minimumSize", new Dimension(450, 130));
-					String[] possibleValues = { "Terminar sessão", "Alterar dados de autenticação", "Cancelar" };
-
+					String[] possibleValues = { "Terminar sessÃ£o", "Alterar dados de autenticaÃ§Ã£o", "Cancelar" };
+					if (logged == false) {
+						JOptionPane.showMessageDialog(null, "ImpossÃ­vel efetuar operaÃ§Ãµes sem fazer login primeiro",
+								"Erro", JOptionPane.INFORMATION_MESSAGE);
+						return;
+					}
 					int value = JOptionPane.showOptionDialog(null,
-							"Tem a certeza que pretende terminar sessão no " + iconName + "?", "Terminar sessão",
+							"Tem a certeza que pretende terminar sessï¿½o no " + iconName + "?", "Terminar sessï¿½o",
 							JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
 							getIconButton(iconName + "On"), possibleValues, possibleValues[1]);
 					if (value == JOptionPane.YES_OPTION) {
@@ -258,8 +262,8 @@ public class BDAButton {
 
 		login.writeXML(doc);
 		JOptionPane.showMessageDialog(null,
-				"Todos os dados e ficheiros associados à sua conta de " + root + " foram removidos do sistema.",
-				"Sessão terminada", JOptionPane.INFORMATION_MESSAGE);
+				"Todos os dados e ficheiros associados ï¿½ sua conta de " + root + " foram removidos do sistema.",
+				"SessÃ£o terminada", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private void updateXML(String root, String user, String type, String input) {
