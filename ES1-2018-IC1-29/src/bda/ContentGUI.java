@@ -4,26 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
-
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -34,27 +26,27 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
-import javax.xml.ws.soap.AddressingFeature;
+
 
 import ContentHandlers.FetchEmails;
 import ContentHandlers.FetchPosts;
 import ContentHandlers.FetchTweets;
 
 /**
- * Cria uma JFrame representativa da interface referente apenas ao conte�do
+ * Cria uma JFrame representativa da interface referente apenas ao conteúdo
  * selecionado
  * 
  * @author Grupo 29
- * @version 2.0
+ * @version 4.0
  */
 public class ContentGUI {
 
 	private JFrame frame;
+	@SuppressWarnings("unused")
 	private GUI i;
 	private Content content;
 	private final Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -75,9 +67,11 @@ public class ContentGUI {
 	private ArrayList<Object> handlers = new ArrayList<>();
 
 	/**
-	 * Construtor de uma interface referente ao conte�do
+	 * Construtor de uma interface referente ao conteúdo
 	 * 
-	 * @param s Status que representa o conte�do
+	 * @param content	Content que será exibido na interface
+	 * @param i		GUI
+	 * @throws HeadlessException
 	 * @throws MessagingException
 	 */
 	public ContentGUI(Content content, GUI i) throws HeadlessException, MessagingException {
@@ -224,6 +218,11 @@ public class ContentGUI {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * Método que possibilita efetuar um retweet através de um botão
+	 * 
+	 * @param retweet JButton que permite o retweet
+	 */
 	private void addRetweetOperation(JButton retweet) {
 		retweet.addActionListener(new ActionListener() {
 
@@ -246,6 +245,12 @@ public class ContentGUI {
 
 	}
 
+	/**
+	 * Método que possiblilita visualizar o número de likes e comentários, 
+	 * assim como os respectivos comentários através de um botão
+	 * 
+	 * @param getLikesComments JButton que permite obter o nº de likes e comnetários
+	 */
 	private void addFacebookOperations(JButton getLikesComments) {
 		getLikesComments.addActionListener(new ActionListener() {
 
@@ -299,8 +304,10 @@ public class ContentGUI {
 	}
 
 	/**
-	 * M�todo que possibilita a resposta por parte do utilizador para o remetente do
-	 * conte�do
+	 * Método que possibilita a resposta por parte do utilizador para o remetente do
+	 * conteúdo
+	 * 
+	 * @param from String (remetente do conteúdo)
 	 */
 	private void addReplyOperations(String from) {
 
@@ -384,6 +391,11 @@ public class ContentGUI {
 		});
 	}
 
+	/**
+	 * Método que mostra uma JOptionPane de sucesso ou insucesso
+	 * 
+	 * @param success Boolean
+	 */
 	private void showMessage(boolean success) {
 		if (success) {
 			JOptionPane.showMessageDialog(null, "Operação realizada com sucesso!", "Sucesso",

@@ -5,26 +5,22 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Scanner;
-
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
-
 import com.restfb.types.Post;
-
 import twitter4j.Status;
 
 /**
- * Implementa um classe que abrange todo o tipo de conteúdos presentes na
- * interface
+ * Implementa um classe que abrange todo o tipo de conteÃºdos presentes na interface
  * 
  * @author Grupo 29
- * @version 2.0
+ * @version 4.0
  */
 
+@SuppressWarnings("serial")
 public class Content implements Serializable {
 
 	private Message msg;
@@ -41,9 +37,10 @@ public class Content implements Serializable {
 	private Boolean scanned = false;
 
 	/**
-	 * Construtor de um Conteúdo da inbox
+	 * Construtor de um ConteÃºdo da inbox refrente a uma mensagem de Email
 	 * 
-	 * @param msg Message que representa o conteúdo de um Email
+	 * @param msg Message que representa o conteÃºdo de um email
+	 * @param username String referente ao username do utilizador
 	 */
 	public Content(Message msg, String username) {
 		this.msg = msg;
@@ -54,9 +51,10 @@ public class Content implements Serializable {
 	}
 
 	/**
-	 * Construtor de um Conteúdo da inbox
+	 * Construtor de um ConteÃºdo da inbox referente a um tweet do Twitter
 	 * 
-	 * @param status Status que representa o conteúdo dum Tweet
+	 * @param status Status que representa o conteÃºdo de um tweet
+	 * @param username String referente ao username do utilizador
 	 */
 	public Content(Status status, String username) {
 		this.status = status;
@@ -66,6 +64,12 @@ public class Content implements Serializable {
 		type = "Twitter";
 	}
 
+	/**
+	 * Construtor de um ConteÃºdo da inbox referente a um post do Facebook
+	 * 
+	 * @param post Post que representa o conteÃºdo de um post
+	 * @param username String referente ao username do utilizador
+	 */
 	public Content(Post post, String username) {
 		this.post = post;
 		this.username = username;
@@ -74,6 +78,13 @@ public class Content implements Serializable {
 		type = "Facebook";
 	}
 
+	/**
+	 * Construtor de um ConteÃºdo da inbox referente a um post de grupo do Facebook
+	 * 
+	 * @param post Post que representa o conteÃºdo de um post num grupo de Facebook
+	 * @param username String referente ao username do utilizador
+	 * @param time	String refertente Ã  hora a que foi colocado o post no grupo
+	 */
 	public Content(Post post, String username, String time) {
 		this.post = post;
 		this.username = username;
@@ -83,6 +94,10 @@ public class Content implements Serializable {
 		this.status = null;
 	}
 
+	/**
+	 * Contrutor de um ConteÃºdo da inbox a partir de um ficheiro txt (offline)
+	 * @param path Ficheiro txt
+	 */ 
 	public Content(File path) {
 		this.post = null;
 		this.msg = null;
@@ -104,9 +119,9 @@ public class Content implements Serializable {
 	}
 
 	/**
-	 * Método que devolve a informação de um tipo de conteúdo
+	 * MÃ©todo que devolve a informaÃ§Ã£o de um tipo de conteÃºdo
 	 * 
-	 * @return Object (de um determinado tipo de conteúdo)
+	 * @return Object (de um determinado tipo de conteÃºdo)
 	 * @throws IOException
 	 * @throws MessagingException
 	 */
@@ -122,7 +137,7 @@ public class Content implements Serializable {
 	}
 
 	/**
-	 * Método que devolve o nome do tipo de conteúdo
+	 * MÃ©todo que devolve o nome do tipo de conteÃºdo
 	 * 
 	 * @return String (type)
 	 */
@@ -131,8 +146,8 @@ public class Content implements Serializable {
 	}
 
 	/**
-	 * Método que devolve uma String correspondente a uma formatação específica da
-	 * data do conteúdo
+	 * MÃ©todo que devolve uma String correspondente a uma formataÃ§Ã£o especÃ­fica da
+	 * data do conteÃºdo
 	 * 
 	 * @return String (hash)
 	 * @throws MessagingException
@@ -166,7 +181,7 @@ public class Content implements Serializable {
 	}
 
 	/**
-	 * Método que devolve uma String correspondente à data do conteúdo
+	 * MÃ©todo que devolve uma String correspondente Ã  data do conteÃºdo
 	 * 
 	 * @return String (hash)
 	 * @throws MessagingException
@@ -195,7 +210,7 @@ public class Content implements Serializable {
 	}
 
 	/**
-	 * Método que retorna uma String com o remetente do conteúdo
+	 * MÃ©todo que retorna uma String com o remetente do conteÃºdo
 	 * 
 	 * @return String (nome do remetente)
 	 * @throws MessagingException
@@ -220,9 +235,9 @@ public class Content implements Serializable {
 	}
 
 	/**
-	 * Método que retorna uma String com o assunto do conteúdo
+	 * MÃ©todo que retorna uma String com o assunto do conteÃºdo
 	 * 
-	 * @return String (assunto do conteúdo)
+	 * @return String (assunto do conteÃºdo)
 	 * @throws MessagingException
 	 * @throws IOException
 	 */
@@ -243,6 +258,11 @@ public class Content implements Serializable {
 
 	}
 
+	/**
+	 * MÃ©todo que devolve o nome do utilizador
+	 * 
+	 * @return	String (nome do utilizador) 
+	 */
 	public String getUsername() {
 		return username;
 	}

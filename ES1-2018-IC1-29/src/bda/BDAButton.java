@@ -1,7 +1,6 @@
 package bda;
 
 import java.awt.Dimension;
-import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -9,32 +8,25 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.mail.MessagingException;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.AbstractTableModel;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Implementa um bot�o a que ser� atribu�do uma interface, imagem e
+ * Implementa um botão a que será atribuído uma interface, imagem e
  * funcionalidade
  * 
  * @author Grupo 29
- * @version 2.0
+ * @version 4.0
  */
 
 public class BDAButton {
@@ -52,10 +44,10 @@ public class BDAButton {
 	private boolean logged = false;
 
 	/**
-	 * Construtor de um bot�o que possui uma interface e uma imagem
+	 * Construtor de um botão que possui uma interface e uma imagem
 	 * 
-	 * @param i        Interface a que pertence o bot�o
-	 * @param iconName Nome da imagem que possuir� o bot�o
+	 * @param i        Interface a que pertence o botão
+	 * @param iconName Nome da imagem que possuirá o botão
 	 */
 	public BDAButton(GUI i, String iconName) {
 		this.iconName = iconName;
@@ -68,11 +60,11 @@ public class BDAButton {
 	}
 
 	/**
-	 * Construtor de um bot�o que possui uma interface, uma imagem e uma ordem
+	 * Construtor de um botão que possui uma interface, uma imagem e uma ordem
 	 * 
-	 * @param i        Interface a que pertence o bot�o
-	 * @param iconName Nome da imagem que possuir� o bot�o
-	 * @param order    Ordem pela qual � caracterizado o bot�o
+	 * @param i        Interface a que pertence o botão
+	 * @param iconName Nome da imagem que possuirá o botão
+	 * @param order    Ordem pela qual é caracterizado o botão
 	 */
 	public BDAButton(GUI i, String iconName, boolean order) {
 		this.order = order;
@@ -83,10 +75,10 @@ public class BDAButton {
 	}
 
 	/**
-	 * M�todo que devolve uma ImageIcon
+	 * Método que devolve uma ImageIcon
 	 * 
 	 * @param n Nome que representa a imagem
-	 * @return ImagemIcon (imagem do bot�o)
+	 * @return ImagemIcon (imagem do botão)
 	 */
 	public ImageIcon getIconButton(String n) {
 
@@ -103,7 +95,7 @@ public class BDAButton {
 	}
 
 	/**
-	 * M�todo que altera a imagem do bot�o conforme o seu estado
+	 * Método que altera a imagem do botão conforme o seu estado
 	 */
 	public void changeImage() {
 		if (state) {
@@ -114,7 +106,7 @@ public class BDAButton {
 	}
 
 	/**
-	 * M�todo que altera o estado do bot�o
+	 * Método que altera o estado do botão
 	 */
 	public void changeState() {
 		if (state) {
@@ -125,7 +117,7 @@ public class BDAButton {
 	}
 
 	/**
-	 * M�todo que devolve um bot�o
+	 * Método que devolve um botão
 	 * 
 	 * @return JButton (this)
 	 */
@@ -134,7 +126,7 @@ public class BDAButton {
 	}
 
 	/**
-	 * M�todo que devolve o estado de um bot�o
+	 * Método que devolve o estado de um botão
 	 * 
 	 * @return boolean (state)
 	 */
@@ -143,7 +135,7 @@ public class BDAButton {
 	}
 
 	/**
-	 * M�todo que devolve o nome de um bot�o
+	 * Método que devolve o nome de um botão
 	 * 
 	 * @return String (iconName)
 	 */
@@ -152,9 +144,8 @@ public class BDAButton {
 	}
 
 	/**
-	 * M�todo que ordena cronologicamente a informa��o da inbox
+	 * Método que adiciona as operações de Login/Termina a sessão
 	 */
-
 	private void addLogOperations() {
 
 		button.addMouseListener(new MouseAdapter() {
@@ -179,7 +170,7 @@ public class BDAButton {
 						return;
 					}
 					int value = JOptionPane.showOptionDialog(null,
-							"Tem a certeza que pretende terminar sess�o no " + iconName + "?", "Terminar sess�o",
+							"Tem a certeza que pretende terminar sessão no " + iconName + "?", "Terminar sessão",
 							JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
 							getIconButton(iconName + "On"), possibleValues, possibleValues[1]);
 					if (value == JOptionPane.YES_OPTION) {
@@ -231,6 +222,11 @@ public class BDAButton {
 
 	}
 
+	/**
+	 * Método que ordena cronologicamente a informação da inbox
+	 * 
+	 * @param i Interface a que pertence o botão
+	 */
 	private void addSortOperations(GUI i) {
 		button.addActionListener(new ActionListener() {
 
@@ -248,6 +244,10 @@ public class BDAButton {
 		});
 	}
 
+	/**
+	 * Método que remove do ficheiro XML os dados associados a uma determinada conta
+	 * do utilizador
+	 */
 	private void deleteFromXML(String root, String user) {
 		Document doc = login.getXMLDoc();
 
@@ -263,10 +263,18 @@ public class BDAButton {
 
 		login.writeXML(doc);
 		JOptionPane.showMessageDialog(null,
-				"Todos os dados e ficheiros associados � sua conta de " + root + " foram removidos do sistema.",
+				"Todos os dados e ficheiros associados à sua conta de " + root + " foram removidos do sistema.",
 				"Sessão terminada", JOptionPane.INFORMATION_MESSAGE);
 	}
 
+	/**
+	 * Método que efetua o update do token/username/password
+	 * 
+	 * @param root  String(tipo de serviço - Email/Facebook/Twitter)
+	 * @param user  String(utilizador)
+	 * @param type  String(tipo de dado a alterar - Token/Password/Username)
+	 * @param input String(valor da alteração pretendida)
+	 */
 	private void updateXML(String root, String user, String type, String input) {
 		Document doc = login.getXMLDoc();
 
@@ -283,6 +291,11 @@ public class BDAButton {
 
 	}
 
+	/**
+	 * Método que muda o estado do logIn
+	 * 
+	 * @param a
+	 */
 	public void setLogged(boolean a) {
 		logged = a;
 	}

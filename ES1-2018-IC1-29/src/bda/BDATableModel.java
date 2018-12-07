@@ -1,22 +1,15 @@
 package bda;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
-
 import javax.mail.MessagingException;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Implementa um modelo de JTable adaptado � listagem de emails, tweets e posts
+ * Implementa um modelo de JTable adaptado à listagem de emails, tweets e posts
  * 
  * @author Grupo 29
- * @version 2.0
+ * @version 4.0
  */
 
 @SuppressWarnings("serial")
@@ -30,7 +23,7 @@ public class BDATableModel extends AbstractTableModel {
 	private DateComparator dc = new DateComparator();
 
 	/**
-	 * Construtor que recebe uma lista de conte�dos para apresentar
+	 * Construtor que recebe uma lista de conteúdos para apresentar
 	 * 
 	 * @param content ArrayList<Content> a apresentar
 	 */
@@ -39,9 +32,9 @@ public class BDATableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * M�todo que devolve o n�mero de colunas
+	 * Método que devolve o número de colunas
 	 * 
-	 * @return Integer (n�mero de colunas)
+	 * @return Integer (número de colunas)
 	 */
 	@Override
 	public int getColumnCount() {
@@ -49,9 +42,9 @@ public class BDATableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * M�todo que devolve o n�mero de linhas
+	 * Método que devolve o número de linhas
 	 * 
-	 * @return Integer (n�mero de linhas)
+	 * @return Integer (número de linhas)
 	 */
 	@Override
 	public int getRowCount() {
@@ -59,9 +52,9 @@ public class BDATableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * M�todo que devolve o valor de uma determinada c�lula
+	 * Método que devolve o valor de uma determinada célula
 	 * 
-	 * @return Object (informa��o da mensagem contida na c�lula)
+	 * @return Object (informação da mensagem contida na célula)
 	 */
 	@Override
 	public Object getValueAt(int row, int column) {
@@ -83,6 +76,16 @@ public class BDATableModel extends AbstractTableModel {
 		return null;
 	}
 
+	/**
+	 * Método que filtra o conteúdo a apresentar
+	 * 
+	 * @param text    String(expressão a ser usada como filtro)
+	 * @param from    Boolean(indica se o filtro deve ser aplicado ao Remetente)
+	 * @param type    Boolean(indica se o filtro deve ser aplicado ao Tipo)
+	 * @param subject Boolean(indica se o filtro deve ser aplicado ao Assunto)
+	 * @param time    Boolean(indica se o filtro deve ser aplicado ao Tempo -
+	 *                últimas 24 horas)
+	 */
 	public void filter(String text, boolean from, boolean type, boolean subject, boolean time) {
 
 		if (backupContent.isEmpty())
@@ -133,19 +136,18 @@ public class BDATableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * M�todo que devolve uma String com o nome da coluna
+	 * Método que devolve um Content referente a uma linha
 	 * 
-	 * @return Content (de uma determinada coluna)
+	 * @return Content (de uma determinada linha)
 	 * @throws MessagingException
 	 * @throws IOException
 	 */
-
 	public Content getMessageAt(int row) throws IOException, MessagingException {
 		return content.get(row);
 	}
 
 	/**
-	 * M�todo que devolve uma String com o nome da coluna
+	 * Método que devolve uma String com o nome da coluna
 	 * 
 	 * @return String (nome da coluna)
 	 */
@@ -154,7 +156,7 @@ public class BDATableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * M�todo que adiciona uma linha � lista de conte�dos
+	 * Método que adiciona uma linha à lista de conteúdos
 	 * 
 	 * @param c Content
 	 */
@@ -163,7 +165,7 @@ public class BDATableModel extends AbstractTableModel {
 	}
 
 	/**
-	 * M�todo que retorna um arraylist com o conte�do da tabela
+	 * Método que retorna um arraylist com o conteúdo da tabela
 	 * 
 	 * @return content ArrayList<Content>
 	 */
@@ -171,11 +173,22 @@ public class BDATableModel extends AbstractTableModel {
 		return content;
 	}
 
+	/**
+	 * Método que adiciona um FetchEmails/FetchPosts/FetchTweets a uma lista de
+	 * Content Handlers
+	 * 
+	 * @param cH Object
+	 */
 	public void addContentHandler(Object cH) {
 		contentHandlers.add(cH);
 
 	}
 
+	/**
+	 * Método que devolve uma lista de Content Handlers
+	 * 
+	 * @return ArrayList<Object>
+	 */
 	public ArrayList<Object> getContentHandlers() {
 		return contentHandlers;
 	}

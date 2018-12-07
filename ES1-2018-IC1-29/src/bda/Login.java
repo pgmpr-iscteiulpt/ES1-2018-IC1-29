@@ -14,7 +14,6 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.mail.MessagingException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,29 +29,25 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import ContentHandlers.FetchEmails;
 import ContentHandlers.FetchPosts;
 import ContentHandlers.FetchTweets;
 import twitter4j.TwitterException;
 
 /**
- * Implementa uma JPanel que est� associada a uma interface e um bot�o
+ * Implementa uma JPanel que está associada a uma interface e um botão
  * 
  * @author Grupo 29
- * @version 2.0
+ * @version 4.0
  */
 
 @SuppressWarnings("serial")
@@ -81,10 +76,10 @@ public class Login extends JDialog {
 	private BDAButton b;
 
 	/**
-	 * Construtor de uma Janela Login que possui uma interface e um respectivo bot�o
+	 * Construtor de uma Janela Login que possui uma interface e um respectivo botão
 	 * 
 	 * @param i Interface a que pertence a Janela Login
-	 * @param b Bot�o que faz aparecer a Janela Login
+	 * @param b Botão que faz aparecer a Janela Login
 	 */
 	public Login(GUI i, BDAButton b) {
 		this.i = i;
@@ -100,16 +95,15 @@ public class Login extends JDialog {
 	}
 
 	/**
-	 * M�todo que permite a visualiza��o da Janela Login
+	 * Método que permite a visualização da Janela Login
 	 */
 	public void open() {
 		login.setSize(width, height);
 		login.setVisible(true);
 	}
 
-	// Cria��o da janela
 	/**
-	 * M�todo que permite criar o design da Janela Login
+	 * Método que permite criar o design da Janela Login
 	 */
 	private void addLoginDialogContent() {
 
@@ -151,7 +145,7 @@ public class Login extends JDialog {
 	}
 
 	/**
-	 * M�todo que devolve o nome do utilizador
+	 * Método que devolve o nome do utilizador
 	 * 
 	 * @return String (mail do utilizador que pretende fazer o Login)
 	 */
@@ -160,7 +154,7 @@ public class Login extends JDialog {
 	}
 
 	/**
-	 * M�todo que devolve a password do utilizador
+	 * Método que devolve a password do utilizador
 	 * 
 	 * @return String (password do utilizador que pretende fazer o Login)
 	 */
@@ -169,7 +163,7 @@ public class Login extends JDialog {
 	}
 
 	/**
-	 * M�todo que implementa as a��es para cada ativa��o dos bot�es
+	 * Método que implementa as ações para cada ativação dos botões
 	 */
 	private void addLoginDialogListeners() {
 
@@ -197,10 +191,9 @@ public class Login extends JDialog {
 		});
 	}
 
-	// Login nos canais
 	/**
-	 * M�todo que permite averiguar se o email e password dados pelo utilizador s�o
-	 * v�lidos para efetuar o Login
+	 * Método que efetua o login e inicia sessão nos respectivos
+	 * canais(online/offline)
 	 */
 	public void login() {
 
@@ -353,15 +346,21 @@ public class Login extends JDialog {
 			((BDATableModel) i.getInboxTable().getModel()).addContentHandler(contentHandler);
 	}
 
+	/**
+	 * Método que pede ao utilizador o token correspondente à sua conta
+	 * 
+	 * @param icon String(icon)
+	 * @return token String(token introduzido pelo utilizador)
+	 */
 	private String askForToken(String icon) {
 
 		String message;
 		if (icon.equals("Twitter")) {
 			message = "           Introduza os 4 tokens de acesso a esta conta, separados por um espa�o"
-					+ System.lineSeparator() + "                   (apenas ter� de o fazer a primeira vez).";
+					+ System.lineSeparator() + "                   (apenas terá de o fazer a primeira vez).";
 		} else {
 			message = "                 Introduza o token de acesso a esta conta" + System.lineSeparator()
-					+ "                   (apenas o ter� de fazer a primeira vez).";
+					+ "                   (apenas o terá de fazer a primeira vez).";
 		}
 		UIManager.put("OptionPane.minimumSize", new Dimension(450, 130));
 		String token = (String) JOptionPane.showInputDialog(null, message, "Novo Utilizador",
@@ -374,7 +373,7 @@ public class Login extends JDialog {
 	}
 
 	/**
-	 * M�todo que permite o utilizador fazer Loggout
+	 * Método que permite o utilizador fazer Loggout
 	 */
 	public void logout() {
 		System.out.println("enntrei");
@@ -409,6 +408,15 @@ public class Login extends JDialog {
 
 	}
 
+	/**
+	 * Método que permite confirmar se o utilizador já possui dados de autenticação
+	 * guardados
+	 * 
+	 * @param type String(tipo de serviço)
+	 * @param user String(utilizador)
+	 * @param pass String(password)
+	 * @return boolean confirmação
+	 */
 	private boolean checkOfflineCredentials(String type, String user, String pass) {
 		Document doc = getXMLDoc();
 
@@ -432,6 +440,15 @@ public class Login extends JDialog {
 
 	}
 
+	/**
+	 * Método que adiciona um conjunto de dados relativos a um utilizador ao
+	 * ficheiro xml
+	 * 
+	 * @param root  String(tipo de serviço)
+	 * @param user  String(utilizador)
+	 * @param pass  String(password)
+	 * @param token String(token)
+	 */
 	private void addXMLElement(String root, String user, String pass, String token) {
 		Document doc = getXMLDoc();
 
@@ -454,6 +471,11 @@ public class Login extends JDialog {
 		writeXML(doc);
 	}
 
+	/**
+	 * Método que abre o documento XML e prepara-o para leitura
+	 * 
+	 * @return Document
+	 */
 	public Document getXMLDoc() {
 		Document doc = null;
 		try {
@@ -469,6 +491,11 @@ public class Login extends JDialog {
 		return doc;
 	}
 
+	/**
+	 * Método que escreve no documento XML
+	 * 
+	 * @param doc Document
+	 */
 	public void writeXML(Document doc) {
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer;
@@ -482,6 +509,15 @@ public class Login extends JDialog {
 		}
 	}
 
+	/**
+	 * Método que acede ao documento XML e devolve o token referente ao respectivo
+	 * serviço e utilizador
+	 * 
+	 * @param root String(tipo de serviço)
+	 * @param user String(utilizador)
+	 * @param pass String(password)
+	 * @return String(token)
+	 */
 	private String getToken(String root, String user, String pass) {
 		Document doc = getXMLDoc();
 

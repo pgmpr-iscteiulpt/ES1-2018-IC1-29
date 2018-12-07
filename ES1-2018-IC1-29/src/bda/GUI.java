@@ -9,19 +9,18 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 import javax.mail.MessagingException;
 import javax.swing.*;
 
 /**
- * Cria uma JFrame representativa da interface de um software dedicado �
- * integra��o de informa��o acad�mica com origem em v�rios sistemas
+ * Cria uma JFrame representativa da interface de um software dedicado à
+ * integração de informação académica com origem em vários sistemas
  * 
  * @author Grupo 29
- * @version 2.0
+ * @version 4.0
  */
- 
+
 public class GUI {
 
 	// Constants
@@ -63,7 +62,7 @@ public class GUI {
 	private JLabel logo;
 
 	/**
-	 * Construtor de uma Janela que possui toda a interface gr�fica do software
+	 * Construtor de uma Janela que possui toda a interface gráfica do software
 	 */
 	public GUI() {
 
@@ -180,10 +179,10 @@ public class GUI {
 	}
 
 	/**
-	 * M�todo que permite a visualiza��o de uma nova Janela referente apenas ao
-	 * conte�do selecionado
+	 * Método que permite a visualização de uma nova Janela referente apenas ao
+	 * conteúdo selecionado
 	 * 
-	 * @param t JTable
+	 * @param i GUI
 	 */
 	private void addTableListener(GUI i) {
 		inboxTable.addMouseListener(new MouseAdapter() {
@@ -199,16 +198,21 @@ public class GUI {
 		});
 	}
 
+	/**
+	 * Método que permite apresentar uma janela com várias opções de filtragem
+	 * 
+	 * @param text String(expressão a filtrar)
+	 */
 	private void getFilteredContent(String text) {
 
-		JFrame filterParameters = new JFrame("Par�metros do Filtro");
+		JFrame filterParameters = new JFrame("Parâmetros do Filtro");
 		filterParameters.setLocation(screenDim.width / 2 - (int) (width * 0.4) / 2,
 				screenDim.height / 2 - (int) (height * 0.3) / 2);
 		filterParameters.setSize(new Dimension((int) (width * 0.4), (int) (height * 0.35)));
 		filterParameters.setLayout(new BorderLayout());
 		filterParameters.setResizable(false);
 
-		JLabel label = new JLabel(" Escolha os par�metros a que deseja aplicar o filtro \"" + text + "\":");
+		JLabel label = new JLabel(" Escolha os parâmetros a que deseja aplicar o filtro \"" + text + "\":");
 		label.setFont(new Font("SansSerif", Font.PLAIN, 16));
 
 		JCheckBox from = new JCheckBox("Remetente");
@@ -217,7 +221,7 @@ public class GUI {
 		type.setFont(new Font("SansSerif", Font.PLAIN, 16));
 		JCheckBox subject = new JCheckBox("Assunto");
 		subject.setFont(new Font("SansSerif", Font.PLAIN, 16));
-		JCheckBox time = new JCheckBox("�ltimas 24 horas");
+		JCheckBox time = new JCheckBox("Últimas 24 horas");
 		time.setFont(new Font("SansSerif", Font.PLAIN, 16));
 
 		JPanel checkBoxes = new JPanel();
@@ -231,8 +235,8 @@ public class GUI {
 		checkBoxes.add(new JLabel(new ImageIcon(new ImageIcon("images/subject.png").getImage().getScaledInstance(50, 50,
 				java.awt.Image.SCALE_SMOOTH))));
 		checkBoxes.add(subject);
-		checkBoxes.add(new JLabel(new ImageIcon(
-				new ImageIcon("images/moreDay.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH))));
+		checkBoxes.add(new JLabel(new ImageIcon(new ImageIcon("images/moreDay.png").getImage().getScaledInstance(50, 50,
+				java.awt.Image.SCALE_SMOOTH))));
 		checkBoxes.add(time);
 
 		ItemListener il = new ItemListener() {
@@ -282,7 +286,7 @@ public class GUI {
 	}
 
 	/**
-	 * M�todo que devolve uma JTextField
+	 * Método que devolve uma JTextField
 	 * 
 	 * @return JTextField (conta do utilizador)
 	 */
@@ -301,16 +305,16 @@ public class GUI {
 	}
 
 	/**
-	 * M�todo que devolve uma JTable
+	 * Método que devolve uma JTable
 	 * 
-	 * @return JTable (local onde se disponibiliza toda a informa��o do software)
+	 * @return JTable (local onde se disponibiliza toda a informação do software)
 	 */
 	public JTable getInboxTable() {
 		return inboxTable;
 	}
 
 	/**
-	 * M�todo que permite a visualiza��o da Janela
+	 * Método que permite a visualização da Janela
 	 */
 	public void open() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

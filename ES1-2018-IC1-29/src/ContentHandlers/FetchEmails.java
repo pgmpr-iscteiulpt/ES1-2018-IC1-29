@@ -3,10 +3,8 @@ package ContentHandlers;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import java.util.ArrayList;
 import java.util.Properties;
-
 import javax.mail.Authenticator;
 import javax.mail.BodyPart;
 import javax.mail.Folder;
@@ -20,28 +18,14 @@ import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.swing.JOptionPane;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
 import bda.Content;
 
 /**
- * Acede � caixa de entrada de uma conta de email tendo em conta que o username
- * e password corretos s�o fornecidos
+ * Acede à caixa de entrada de uma conta de Email tendo em conta que o username
+ * e password corretos são fornecidos
  * 
  * @author Grupo 29
- * @version 2.0
+ * @version 4.0
  */
 public class FetchEmails {
 
@@ -52,10 +36,11 @@ public class FetchEmails {
 	private Store store;
 	private Folder inbox;
 	private PasswordAuthentication p;
+	@SuppressWarnings("unused")
 	private boolean textIsHTML = false;
 
 	/**
-	 * M�todo que devolve um arraylist de Conte�dos
+	 * Método que devolve um arraylist de Conteúdos
 	 * 
 	 * @return msgs ArrayList<Content> (mensagens que constam no mail do utilizador)
 	 */
@@ -63,6 +48,9 @@ public class FetchEmails {
 		return msgs;
 	}
 
+	/**
+	 * Método que define as propriedades de acesso à caixa de email
+	 */
 	public void setProperties() {
 		props.setProperty("mail.store.protocol", "imaps");
 		props.put("mail.smtp.host", "smtp.gmail.com");
@@ -72,11 +60,19 @@ public class FetchEmails {
 		props.put("mail.smtp.port", "465");
 	}
 
+	/**
+	 * Método que valida o username e password, inicia uma sessão e acede à inbox do
+	 * utilizador
+	 * 
+	 * @param userName String(username)
+	 * @param password String(password)
+	 */
 	public void connect(String userName, String password) throws MessagingException {
 		setProperties();
 		this.userName = userName;
 		p = new PasswordAuthentication(userName, password);
-		Authenticator a = new Authenticator() { @Override
+		Authenticator a = new Authenticator() {
+			@Override
 			protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
 				// TODO Auto-generated method stub
 				return p;
@@ -90,11 +86,8 @@ public class FetchEmails {
 	}
 
 	/**
-	 * M�todo que confirma se o username e password fornecidos est�o corretos e
-	 * acede � conta de email
+	 * Método que acede à conta de email e guarda as mensagens localmente
 	 * 
-	 * @param username String (username do utilizador)
-	 * @param password String (password do utilizador)
 	 * @throws IOException
 	 * @throws MessagingException
 	 */
@@ -136,8 +129,15 @@ public class FetchEmails {
 
 	}
 
+	/**
+	 * Método que envia um email
+	 * 
+	 * @param to      String(destinatário)
+	 * @param from    String(remetente)
+	 * @param subject String(assunto)
+	 * @param text    String(texto)
+	 */
 	public void sendEmail(String to, String from, String subject, String text) {
-
 
 		try {
 
@@ -164,10 +164,23 @@ public class FetchEmails {
 
 	}
 
+	/**
+	 * Método que devolve o nome do user
+	 * 
+	 * @return userName String(user)
+	 */
 	public String getUserName() {
 		return userName;
 	}
 
+	/**
+	 * Método que devolve um texto e uma mensagem
+	 * 
+	 * @param p String(texto)
+	 * @return
+	 * @throws MessagingException
+	 * @throws IOException
+	 */
 	public String getText(Part p) throws MessagingException, IOException {
 		if (p.isMimeType("text/*")) {
 			String s = (String) p.getContent();
@@ -206,12 +219,4 @@ public class FetchEmails {
 		return null;
 	}
 
-	private String clean(String unsafe) {
-		Whitelist whitelist = Whitelist.none();
-		whitelist.addTags(new String[] { "p", "br", "ul" });
-
-		String safe = Jsoup.clean(unsafe, whitelist);
-		return safe;
-
-	}
 }

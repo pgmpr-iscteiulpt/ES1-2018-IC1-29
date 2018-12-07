@@ -1,10 +1,8 @@
 package ContentHandlers;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +18,10 @@ import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
 /**
- * Acede � caixa de entrada de uma conta do twitter tendo em conta que o
- * username e password fornecidos s�o corretos
+ * Acede à caixa de entrada de uma conta do Twitter
  * 
  * @author Grupo 29
- * @version 2.0
+ * @version 4.0
  */
 
 public class FetchTweets {
@@ -39,6 +36,9 @@ public class FetchTweets {
 	private String token3;
 	private String token4;
 
+	/**
+	 * Método que define as propriedades de acesso à conta do twitter
+	 */
 	private void setProperties() {
 		conf = new ConfigurationBuilder();
 		conf.setDebugEnabled(true).setOAuthConsumerKey(token1).setOAuthConsumerSecret(token2)
@@ -48,6 +48,14 @@ public class FetchTweets {
 		twitter = factory.getInstance();
 	}
 
+	/**
+	 * Método que faz a conecção à conta do twitter usando tokens de acesso
+	 * 
+	 * @param token1 String
+	 * @param token2 String
+	 * @param token3 String
+	 * @param token4 String
+	 */
 	public void connect(String token1, String token2, String token3, String token4) {
 		this.token1 = token1;
 		this.token2 = token2;
@@ -65,15 +73,11 @@ public class FetchTweets {
 	}
 
 	/**
-	 * M�todo que confirma se o username e password fornecidos est�o corretos e
-	 * acede � conta do twitter
-	 * 
-	 * @param username String (username do utilizador)
-	 * @param password String (password do utilizador)
-	 * @throws TwitterException
+	 * Método que acede à conta do twitter e guarda os tweets localmente
+	 *
 	 * @throws IOException
 	 * @throws MessagingException
-	 * @throws IllegalStateException
+	 * @throws TwitterException
 	 */
 	public void checkTweets() throws TwitterException, MessagingException, IOException {
 		List<Status> statuses = twitter.getHomeTimeline();
@@ -96,6 +100,12 @@ public class FetchTweets {
 
 	}
 
+	/**
+	 * Método que permite responder a um tweet
+	 * 
+	 * @param tweetId      long(tweetId)
+	 * @param replyMessage String(mensagem)
+	 */
 	public void replyTweet(long tweetId, String replyMessage) {
 		StatusUpdate statusUpdate = new StatusUpdate(replyMessage);
 		statusUpdate.setInReplyToStatusId(tweetId);
@@ -107,6 +117,11 @@ public class FetchTweets {
 
 	}
 
+	/**
+	 * Método que permite fazer retweet
+	 * 
+	 * @param tweetId long(tweetId)
+	 */
 	public void retweet(long tweetId) {
 		try {
 			twitter.retweetStatus(tweetId);
@@ -116,7 +131,7 @@ public class FetchTweets {
 	}
 
 	/**
-	 * M�todo que devolve um arraylist de Conte�dos
+	 * Método que devolve um arraylist de Conteúdos
 	 * 
 	 * @return status ArrayList<Content> (tweets que constam no twitter do
 	 *         utilizador)
@@ -126,6 +141,11 @@ public class FetchTweets {
 
 	}
 
+	/**
+	 * Método que devolve o nome do user
+	 * 
+	 * @return username String(user)
+	 */
 	public String getUserName() {
 		return userName;
 	}
